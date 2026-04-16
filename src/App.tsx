@@ -4,48 +4,54 @@ import { db } from "./db";
 
 const lightVars = `
   :root {
-    --bg: #f5ede0;
-    --bg2: #fffaf4;
-    --card-bg: #fff8f0;
-    --card-border: #e8d5bc;
-    --sidebar-bg: linear-gradient(180deg, #fff3e0 0%, #ffe0b2 100%);
-    --sidebar-border: #f0c080;
-    --text: #3d1a00;
-    --text-sub: #8a5c30;
-    --text-muted: #b08050;
-    --input-bg: #fff7ed;
-    --input-border: #e8c090;
-    --nav-hover: #fff0e0;
-    --nav-active-bg: linear-gradient(90deg, #fff0d8 0%, #ffe4b8 100%);
-    --table-row-hover: #fff5e6;
-    --table-border: #f0d8b0;
-    --meal-card: #fffaf3;
-    --inv-bar-bg: #f0d8b0;
-    --scrollbar-track: #f5ede0;
-    --scrollbar-thumb: #e8a060;
+    --bg: #fefcf9;
+    --bg2: #ffffff;
+    --card-bg: rgba(255, 255, 255, 0.85);
+    --card-border: rgba(249, 115, 22, 0.15);
+    --sidebar-bg: #fffbf5;
+    --sidebar-border: #f5eadd;
+    --text: #1a1510;
+    --text-sub: #5c4d3e;
+    --text-muted: #9c8b7b;
+    --input-bg: #ffffff;
+    --input-border: #e8dfd5;
+    --nav-hover: #fcf6ef;
+    --nav-active-bg: linear-gradient(90deg, #fff7ed 0%, #ffeedd 100%);
+    --table-row-hover: #fdfaf7;
+    --table-border: #f0e6da;
+    --meal-card: #ffffff;
+    --inv-bar-bg: #f0e6da;
+    --scrollbar-track: #fefcf9;
+    --scrollbar-thumb: #f97316;
+    --shadow-soft: 0 4px 20px rgba(0,0,0,0.04);
+    --shadow-card: 0 10px 40px rgba(26, 21, 16, 0.05);
+    --primary: #f97316;
   }`;
 
 const darkVars = `
   :root {
-    --bg: #1a0f00;
-    --bg2: #1e0f00;
-    --card-bg: linear-gradient(135deg, #251200 0%, #1e0f00 100%);
-    --card-border: #3d2000;
-    --sidebar-bg: linear-gradient(180deg, #2c1500 0%, #1a0c00 100%);
-    --sidebar-border: #3d1f00;
-    --text: #fdf3e3;
-    --text-sub: #8a6040;
-    --text-muted: #7a5030;
-    --input-bg: #2c1500;
-    --input-border: #3d2000;
-    --nav-hover: #2c1a0a;
-    --nav-active-bg: linear-gradient(90deg, #2c1500 0%, #1e1000 100%);
-    --table-row-hover: #2c1500;
-    --table-border: #2a1500;
-    --meal-card: #251200;
-    --inv-bar-bg: #3d2000;
-    --scrollbar-track: #1a0f00;
+    --bg: #0d0a07;
+    --bg2: #140f0a;
+    --card-bg: rgba(24, 18, 12, 0.8);
+    --card-border: rgba(249, 115, 22, 0.1);
+    --sidebar-bg: #140f0a;
+    --sidebar-border: #241c14;
+    --text: #f9f5f0;
+    --text-sub: #b8a898;
+    --text-muted: #8c7d6d;
+    --input-bg: #1a140f;
+    --input-border: #2d241c;
+    --nav-hover: #1f1812;
+    --nav-active-bg: linear-gradient(90deg, #241c14 0%, #1a140f 100%);
+    --table-row-hover: #1a140f;
+    --table-border: #241c14;
+    --meal-card: #1a140f;
+    --inv-bar-bg: #2d241c;
+    --scrollbar-track: #0d0a07;
     --scrollbar-thumb: #c45c1a;
+    --shadow-soft: 0 4px 20px rgba(0,0,0,0.4);
+    --shadow-card: 0 10px 40px rgba(0,0,0,0.5);
+    --primary: #f97316;
   }`;
 
 const getStyle = (theme) => (theme === 'light' ? lightVars : darkVars) + `
@@ -69,179 +75,208 @@ const getStyle = (theme) => (theme === 'light' ? lightVars : darkVars) + `
 
   /* SIDEBAR */
   .sidebar {
-    width: 230px;
+    width: 260px;
     min-height: 100vh;
     background: var(--sidebar-bg);
     border-right: 1px solid var(--sidebar-border);
     display: flex;
     flex-direction: column;
-    padding: 28px 0 20px;
+    padding: 32px 0 24px;
     position: fixed;
     top: 0; left: 0; bottom: 0;
-    z-index: 100;
-    transition: background 0.3s;
+    z-index: 1000;
   }
 
   .logo {
-    padding: 0 24px 28px;
-    border-bottom: 1px solid var(--sidebar-border);
-    margin-bottom: 16px;
+    padding: 0 28px 32px;
+    margin-bottom: 20px;
   }
 
   .logo-title {
     font-family: 'Playfair Display', serif;
-    font-size: 26px;
-    font-weight: 900;
-    color: #f97316;
-    letter-spacing: -0.5px;
+    font-size: 28px;
+    font-weight: 1000;
+    color: var(--primary);
+    letter-spacing: -0.8px;
     line-height: 1;
   }
 
   .logo-sub {
-    font-size: 10px;
-    color: #8a6040;
-    letter-spacing: 2px;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 3px;
     text-transform: uppercase;
-    margin-top: 4px;
+    margin-top: 6px;
+    font-weight: 700;
   }
 
   .nav-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 11px 24px;
+    gap: 14px;
+    padding: 12px 28px;
     cursor: pointer;
-    font-size: 13.5px;
-    font-weight: 500;
+    font-size: 14px;
+    font-weight: 600;
     color: var(--text-muted);
-    transition: all 0.2s;
-    border-left: 3px solid transparent;
-    margin: 1px 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-left: 4px solid transparent;
+    margin: 2px 12px;
+    border-radius: 12px;
   }
 
   .nav-item:hover { background: var(--nav-hover); color: var(--text); }
   .nav-item.active {
-    color: #f97316;
+    color: var(--primary);
     background: var(--nav-active-bg);
-    border-left: 3px solid #f97316;
+    border-left-color: var(--primary);
   }
 
-  .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+  .nav-icon { font-size: 18px; width: 24px; display: flex; align-items: center; justify-content: center; opacity: 0.8; }
 
   .sidebar-footer {
     margin-top: auto;
-    padding: 16px 24px;
+    padding: 24px 28px;
     border-top: 1px solid var(--sidebar-border);
-    font-size: 11px;
-    color: var(--text-muted);
   }
 
   /* MAIN */
   .main {
-    margin-left: 230px;
+    margin-left: 260px;
     flex: 1;
-    padding: 32px;
+    padding: 48px;
     min-height: 100vh;
+    max-width: 1400px;
   }
 
   .page-header {
-    margin-bottom: 28px;
+    margin-bottom: 40px;
   }
 
   .page-title {
     font-family: 'Playfair Display', serif;
-    font-size: 30px;
-    font-weight: 900;
-    color: #fdf3e3;
+    font-size: 36px;
+    font-weight: 1000;
+    color: var(--text);
     line-height: 1.1;
+    letter-spacing: -1px;
   }
 
   .page-sub {
-    font-size: 13px;
-    color: #8a6040;
-    margin-top: 4px;
+    font-size: 15px;
+    color: var(--text-muted);
+    margin-top: 8px;
   }
 
   /* CARDS */
   .card {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
-    border-radius: 16px;
-    padding: 22px;
-    transition: background 0.3s, border-color 0.3s;
+    border-radius: 24px;
+    padding: 32px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: var(--shadow-card);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
   .card-label {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    color: #7a5030;
-    margin-bottom: 8px;
+    color: var(--primary);
+    margin-bottom: 12px;
+    opacity: 0.8;
   }
 
   .card-value {
     font-family: 'Playfair Display', serif;
-    font-size: 36px;
-    font-weight: 700;
-    color: #f97316;
+    font-size: 42px;
+    font-weight: 1000;
+    color: var(--text);
     line-height: 1;
+    margin-bottom: 8px;
   }
 
   .card-note {
-    font-size: 12px;
-    color: #8a6040;
-    margin-top: 6px;
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
   }
 
-  .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 
   /* BADGE */
   .badge {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
   }
-  .badge-green { background: #14532d33; color: #4ade80; border: 1px solid #16a34a44; }
-  .badge-red { background: #7f1d1d33; color: #f87171; border: 1px solid #dc262644; }
-  .badge-orange { background: #7c2d1233; color: #fb923c; border: 1px solid #ea580c44; }
-  .badge-blue { background: #1e3a5f33; color: #60a5fa; border: 1px solid #2563eb44; }
+  .badge-green { background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.2); }
+  .badge-red { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+  .badge-orange { background: rgba(249, 115, 22, 0.15); color: #f97316; border: 1px solid rgba(249, 115, 22, 0.2); }
+  .badge-blue { background: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.2); }
 
   /* BUTTON */
   .btn {
-    padding: 9px 18px;
-    border-radius: 10px;
+    padding: 14px 28px;
+    border-radius: 16px;
     border: none;
     font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 800;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    letter-spacing: 0.2px;
   }
-  .btn-primary { background: #f97316; color: #fff; }
-  .btn-primary:hover { background: #ea6c0a; transform: translateY(-1px); }
-  .btn-ghost { background: #2c1500; color: #f97316; border: 1px solid #3d2000; }
-  .btn-ghost:hover { background: #3d1f00; }
-  .btn-sm { padding: 6px 12px; font-size: 12px; }
+  .btn-primary { 
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); 
+    color: #fff; 
+    box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+  }
+  .btn-primary:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0 8px 25px rgba(249, 115, 22, 0.4);
+    background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+  }
+  .btn-ghost { 
+    background: var(--input-bg); 
+    color: var(--primary); 
+    border: 1px solid var(--input-border); 
+  }
+  .btn-ghost:hover { 
+    background: var(--nav-hover); 
+    border-color: var(--primary);
+  }
+  .btn-sm { padding: 8px 16px; font-size: 12px; border-radius: 10px; }
 
   /* TABLE */
-  .table-wrap { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; }
-  thead tr { border-bottom: 1px solid var(--card-border); }
+  .table-wrap { overflow-x: auto; border-radius: 16px; border: 1px solid var(--table-border); }
+  table { width: 100%; border-collapse: collapse; background: var(--bg2); }
   th {
     text-align: left;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 1px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
     color: var(--text-muted);
-    padding: 10px 14px;
+    padding: 20px 24px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--table-border);
   }
-  td { padding: 12px 14px; font-size: 13.5px; color: var(--text-sub); border-bottom: 1px solid var(--table-border); }
+  td { padding: 20px 24px; font-size: 15px; color: var(--text-sub); border-bottom: 1px solid var(--table-border); }
   tr:hover td { background: var(--table-row-hover); }
   tr:last-child td { border-bottom: none; }
 
@@ -296,8 +331,8 @@ const getStyle = (theme) => (theme === 'light' ? lightVars : darkVars) + `
 
   /* MAP placeholder */
   .map-box {
-    background: #1a0f00;
-    border: 1px solid #3d2000;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
     border-radius: 16px;
     overflow: hidden;
     position: relative;
@@ -319,12 +354,12 @@ const getStyle = (theme) => (theme === 'light' ? lightVars : darkVars) + `
   .map-pin:hover { transform: scale(1.4); }
   .map-tooltip {
     position: absolute;
-    background: #251200;
+    background: var(--card-bg);
     border: 1px solid #f97316;
     border-radius: 8px;
     padding: 8px 12px;
     font-size: 12px;
-    color: #fdf3e3;
+    color: var(--text);
     pointer-events: none;
     white-space: nowrap;
     z-index: 10;
@@ -339,13 +374,13 @@ const getStyle = (theme) => (theme === 'light' ? lightVars : darkVars) + `
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
-    border: 1px solid #3d2000;
-    background: #1e0f00;
-    color: #7a5030;
+    border: 1px solid var(--card-border);
+    background: var(--input-bg);
+    color: var(--text-muted);
     transition: all 0.2s;
   }
   .day-tab.active { background: #f97316; color: #fff; border-color: #f97316; }
-  .day-tab:hover:not(.active) { background: #2c1500; color: #f5c89a; }
+  .day-tab:hover:not(.active) { background: var(--nav-hover); color: var(--text-sub); }
 
   /* TOAST */
   .toast {
@@ -388,11 +423,11 @@ const getStyle = (theme) => (theme === 'light' ? lightVars : darkVars) + `
     font-family: 'Playfair Display', serif;
     font-size: 18px;
     font-weight: 700;
-    color: #f5c89a;
+    color: var(--text);
     margin-bottom: 14px;
   }
 
-  .divider { border: none; border-top: 1px solid #3d2000; margin: 20px 0; }
+  .divider { border: none; border-top: 1px solid var(--card-border); margin: 20px 0; }
 
   .tag {
     display: inline-block;
@@ -594,12 +629,12 @@ const getStyle = (theme) => (theme === 'light' ? lightVars : darkVars) + `
     align-items: center;
     justify-content: center;
     border-radius: 10px;
-    background: #2c1500;
-    border: 1px solid #3d2000;
-    color: #f5c89a;
+    background: var(--input-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text);
     transition: all 0.2s;
   }
-  .notif-bell:hover { background: #3d2000; color: #f97316; }
+  .notif-bell:hover { background: var(--nav-hover); color: #f97316; }
   .notif-badge {
     position: absolute;
     top: -5px; right: -5px;
@@ -613,21 +648,21 @@ const getStyle = (theme) => (theme === 'light' ? lightVars : darkVars) + `
   }
   .notif-dropdown {
     position: absolute;
-    top: 50px; right: 0;
+    top: 50px; left: 0;
     width: 320px;
     max-height: 400px;
-    background: #2c1500;
-    border: 1px solid #3d2000;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
     border-radius: 16px;
     overflow-y: auto;
     z-index: 999;
-    box-shadow: 0 16px 32px rgba(0,0,0,0.4);
+    box-shadow: 0 16px 32px rgba(0,0,0,0.15);
     display: flex;
     flex-direction: column;
   }
-  .notif-item { padding: 14px; border-bottom: 1px solid #3d2000; cursor: pointer; }
-  .notif-item:hover { background: #3d2000; }
-  .notif-item.unread { border-left: 3px solid #f97316; }
+  .notif-item { padding: 14px; border-bottom: 1px solid var(--card-border); cursor: pointer; }
+  .notif-item:hover { background: var(--nav-hover); }
+  .notif-item.unread { border-left: 3px solid #f97316; background: var(--nav-active-bg); }
 
   /* PROFILE */
   .profile-grid { display: grid; grid-template-columns: 240px 1fr; gap: 24px; }
@@ -695,11 +730,11 @@ const initialOffers = [
 ];
 
 const messesList = [
-  { id: 1, name: "HomeBite (Central)", type: "General Mess", open: "7:30 AM", close: "10:30 PM", status: "Open", rating: 4.8, distance: "0 m", plan: "₹3000/month", offers: ["10% off annually"], menu: "Standard Indian Thali", address: "Ground Floor, Central Hostel Block", img: "/login_bg.png", isVeg: true },
-  { id: 2, name: "Annapurna Mess", type: "Pure Veg Meal", open: "8:00 AM", close: "9:30 PM", status: "Open", rating: 4.5, distance: "120 m", plan: "₹2500/month", offers: ["First week free demo"], menu: "Gujarati & Punjabi Veg Thali", address: "Behind Library, East Wing", img: "/mess_veg.png", isVeg: true },
-  { id: 3, name: "Student Point Canteen", type: "Snacks & Fast Food", open: "10:00 AM", close: "11:00 PM", status: "Open", rating: 4.2, distance: "300 m", plan: "Pay per item", offers: ["Free chai with ₹100 order"], menu: "Samosa, Maggi, Burgers", address: "Near North Gate Entrance", img: "/mess_canteen.png", isVeg: false },
-  { id: 4, name: "Night Owl Cafe", type: "Late Night", open: "8:00 PM", close: "3:00 AM", status: "Closed", rating: 4.9, distance: "450 m", plan: "Pay per item", offers: ["No delivery fee"], menu: "Coffee, Sandwiches, Fries", address: "Rooftop, Block D Recreation Center", img: "/login_bg.png", isVeg: false },
-  { id: 5, name: "Spice Route Mess", type: "Non-Veg", open: "12:00 PM", close: "10:00 PM", status: "Open", rating: 4.4, distance: "500 m", plan: "₹3500/month", offers: ["Free Sunday special add-on"], menu: "Chicken Biryani, Curries, Rotis", address: "Basement Level, South Block", img: "/mess_premium.png", isVeg: false },
+  { id: 1, name: "HomeBite (Central)", type: "General Mess", open: "7:30 AM", close: "10:30 PM", status: "Open", rating: 4.8, distance: "0 m", plan: "₹3000/month", offers: ["10% off annually"], menu: "Standard Indian Thali", address: "Ground Floor, Central Hostel Block", img: "/login_bg.png", isVeg: true, contact: "+91 98765-43210" },
+  { id: 2, name: "Annapurna Mess", type: "Pure Veg Meal", open: "8:00 AM", close: "9:30 PM", status: "Open", rating: 4.5, distance: "120 m", plan: "₹2500/month", offers: ["First week free demo"], menu: "Gujarati & Punjabi Veg Thali", address: "Behind Library, East Wing", img: "/mess_veg.png", isVeg: true, contact: "+91 98765-43211" },
+  { id: 3, name: "Student Point Canteen", type: "Snacks & Fast Food", open: "10:00 AM", close: "11:00 PM", status: "Open", rating: 4.2, distance: "300 m", plan: "Pay per item", offers: ["Free chai with ₹100 order"], menu: "Samosa, Maggi, Burgers", address: "Near North Gate Entrance", img: "/mess_canteen.png", isVeg: false, contact: "+91 98765-43212" },
+  { id: 4, name: "Night Owl Cafe", type: "Late Night", open: "8:00 PM", close: "3:00 AM", status: "Closed", rating: 4.9, distance: "450 m", plan: "Pay per item", offers: ["No delivery fee"], menu: "Coffee, Sandwiches, Fries", address: "Rooftop, Block D Recreation Center", img: "/login_bg.png", isVeg: false, contact: "+91 98765-43213" },
+  { id: 5, name: "Spice Route Mess", type: "Non-Veg", open: "12:00 PM", close: "10:00 PM", status: "Open", rating: 4.4, distance: "500 m", plan: "₹3500/month", offers: ["Free Sunday special add-on"], menu: "Chicken Biryani, Curries, Rotis", address: "Basement Level, South Block", img: "/mess_premium.png", isVeg: false, contact: "+91 98765-43214" },
 ];
 
 const initialStudents = [
@@ -723,13 +758,17 @@ const initialInventory = [
 ];
 
 const nearbyPlaces = [
-  { name: "Campus Canteen", type: "Canteen", dist: "200m", rating: 4.2, x: 38, y: 42, open: true },
-  { name: "Sharma Dhaba", type: "Restaurant", dist: "450m", rating: 4.5, x: 65, y: 30, open: true },
-  { name: "Green Bowl Café", type: "Café", dist: "600m", rating: 4.1, x: 72, y: 62, open: false },
-  { name: "SuperMart Grocery", type: "Grocery", dist: "800m", rating: 4.3, x: 22, y: 68, open: true },
-  { name: "Spice Garden", type: "Restaurant", dist: "1.1km", rating: 4.7, x: 50, y: 75, open: true },
-  { name: "City Bakery", type: "Bakery", dist: "1.3km", rating: 4.0, x: 82, y: 48, open: true },
+  { name: "Campus Canteen", type: "Canteen", dist: "200m", rating: 4.2, lat: 18.5590, lng: 73.8165, open: true, address: "University Campus, Pune" },
+  { name: "Sharma Dhaba", type: "Restaurant", dist: "450m", rating: 4.5, lat: 18.5600, lng: 73.8180, open: true, address: "Gate No.2, Near Campus" },
+  { name: "Green Bowl Café", type: "Café", dist: "600m", rating: 4.1, lat: 18.5575, lng: 73.8190, open: false, address: "Senapati Bapat Road" },
+  { name: "SuperMart Grocery", type: "Grocery", dist: "800m", rating: 4.3, lat: 18.5570, lng: 73.8155, open: true, address: "Near Symbiosis, Pune" },
+  { name: "Spice Garden", type: "Restaurant", dist: "1.1km", rating: 4.7, lat: 18.5560, lng: 73.8200, open: true, address: "FC Road, Pune" },
+  { name: "City Bakery", type: "Bakery", dist: "1.3km", rating: 4.0, lat: 18.5610, lng: 73.8210, open: true, address: "Deccan Gymkhana, Pune" },
 ];
+
+// HomeBite Hostel center coords
+const HOSTEL_LAT = 18.5585;
+const HOSTEL_LNG = 73.8170;
 
 const feedbacks = [
   { id: 1, student: "Aanya S.", meal: "Monday Lunch", rating: 5, comment: "Paneer was excellent today!", time: "2h ago" },
@@ -757,24 +796,28 @@ function Dashboard({ students, inventory }) {
   const unpaid = students.filter(s => !s.paid).length;
   const lowStock = inventory.filter(i => i.stock <= i.threshold);
   const todayMenu = weekMenu[today] || weekMenu["Monday"];
+  const totalGuestMeals = students.reduce((acc, s) => acc + (s.guestMeals || 0), 0);
+  const guestRevenue = totalGuestMeals * 150;
 
   return (
     <div className="fade-in">
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
         <span className="live-dot" />
         <span style={{ fontSize: 12, color: "#4ade80", fontWeight: 600 }}>LIVE</span>
-        <span style={{ fontSize: 12, color: "#7a5030", marginLeft: 4 }}>{new Date().toLocaleString()}</span>
+        <span style={{ fontSize: 12, color: "var(--text-muted)", marginLeft: 4 }}>{new Date().toLocaleString()}</span>
       </div>
       <div className="page-header">
         <div className="page-title">Welcome back, Admin 👋</div>
         <div className="page-sub">Here's what's happening at HomeBite today</div>
       </div>
 
-      <div className="grid-4" style={{ marginBottom: 20 }}>
-        <StatCard label="Total Students" value={students.length} note="Enrolled in mess" color="#f97316" />
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 20, marginBottom: 24 }}>
+        <StatCard label="Total Students" value={students.length} note="Enrolled members" color="#f97316" />
         <StatCard label="Pending Dues" value={unpaid} note={`₹${students.filter(s=>!s.paid).reduce((a,b)=>a+b.balance,0).toLocaleString()} total`} color="#ef4444" />
-        <StatCard label="Low Stock Items" value={lowStock.length} note="Need reorder" color="#eab308" />
-        <StatCard label="Today's Rating" value="4.2★" note="Based on 18 reviews" color="#22c55e" />
+        <StatCard label="Low Stock Items" value={lowStock.length} note="Alerts active" color="#eab308" />
+        <StatCard label="Avg Rating" value="4.2★" note="Based on latest reviews" color="#22c55e" />
+        <StatCard label="Guest Meals" value={totalGuestMeals} note="Today's bookings" color="#a855f7" />
+        <StatCard label="Guest Revenue" value={`₹${guestRevenue.toLocaleString()}`} note="Today's total" color="#10b981" />
       </div>
 
       <div className="grid-2" style={{ marginBottom: 20 }}>
@@ -793,26 +836,26 @@ function Dashboard({ students, inventory }) {
         <div className="card">
           <div className="section-title">Low Stock Alerts 🚨</div>
           {lowStock.length === 0
-            ? <div style={{ color: "#4ade80", fontSize: 13 }}>✅ All stock levels are healthy!</div>
+            ? <div style={{ color: "#4ade80", fontSize: 13, padding: 10 }}>✅ All stock levels are healthy!</div>
             : lowStock.map(item => (
-              <div key={item.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: "1px solid #2a1500" }}>
+              <div key={item.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 0", borderBottom: "1px solid var(--table-border)" }}>
                 <div>
-                  <div style={{ fontWeight: 600, color: "#f5c89a", fontSize: 13 }}>{item.name}</div>
-                  <div style={{ fontSize: 11, color: "#7a5030" }}>{item.stock} {item.unit} remaining</div>
+                  <div style={{ fontWeight: 600, color: "var(--text)", fontSize: 14 }}>{item.name}</div>
+                  <div style={{ fontSize: 11, color: "var(--text-muted)" }}>{item.stock} {item.unit} remaining</div>
                 </div>
-                <span className="badge badge-red">Low</span>
+                <span className="badge badge-red">Critical</span>
               </div>
             ))
           }
           <hr className="divider" />
           <div className="section-title" style={{ marginBottom: 10 }}>Pending Dues</div>
           {students.filter(s => !s.paid).map(s => (
-            <div key={s.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 0", borderBottom: "1px solid #2a1500" }}>
+            <div key={s.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0", borderBottom: "1px solid var(--table-border)" }}>
               <div>
-                <div style={{ fontWeight: 600, color: "#f5c89a", fontSize: 13 }}>{s.name}</div>
-                <div style={{ fontSize: 11, color: "#7a5030" }}>{s.room} · {s.plan}</div>
+                <div style={{ fontWeight: 600, color: "var(--text)", fontSize: 14 }}>{s.name}</div>
+                <div style={{ fontSize: 11, color: "var(--text-muted)" }}>{s.room} · {s.plan}</div>
               </div>
-              <span style={{ color: "#ef4444", fontWeight: 700 }}>₹{s.balance.toLocaleString()}</span>
+              <span style={{ color: "#ef4444", fontWeight: 800 }}>₹{s.balance.toLocaleString()}</span>
             </div>
           ))}
         </div>
@@ -820,15 +863,15 @@ function Dashboard({ students, inventory }) {
 
       <div className="card">
         <div className="section-title">Recent Feedback</div>
-        <div style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 14 }}>
           {feedbacks.slice(0,3).map(f => (
-            <div key={f.id} style={{ flex: "1 1 200px", background: "#1a0f00", border: "1px solid #3d2000", borderRadius: 12, padding: 14 }}>
+            <div key={f.id} style={{ background: "var(--meal-card)", border: "1px solid var(--card-border)", borderRadius: 12, padding: 16 }}>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <span style={{ fontWeight: 700, color: "#f5c89a", fontSize: 13 }}>{f.student}</span>
+                <span style={{ fontWeight: 700, color: "var(--text)", fontSize: 13 }}>{f.student}</span>
                 <span style={{ color: "#eab308", fontSize: 13 }}>{"★".repeat(f.rating)}{"☆".repeat(5-f.rating)}</span>
               </div>
-              <div style={{ fontSize: 11, color: "#7a5030", margin: "3px 0 6px" }}>{f.meal} · {f.time}</div>
-              <div style={{ fontSize: 13, color: "#a07050" }}>"{f.comment}"</div>
+              <div style={{ fontSize: 11, color: "var(--text-muted)", margin: "3px 0 6px" }}>{f.meal} · {f.time}</div>
+              <div style={{ fontSize: 13, color: "var(--text-sub)" }}>"{f.comment}"</div>
             </div>
           ))}
         </div>
@@ -837,7 +880,7 @@ function Dashboard({ students, inventory }) {
   );
 }
 
-function StudentDashboard({ student, enrolledMess, setEnrolledMess, setActiveTab, showToast }) {
+function StudentDashboard({ student, enrolledMess, setEnrolledMess, setActiveTab, showToast, setStudents }) {
   const todayMenu = weekMenu[today] || weekMenu["Monday"];
   const isPaid = student.paid;
   const isEnrolled = !!enrolledMess;
@@ -845,6 +888,17 @@ function StudentDashboard({ student, enrolledMess, setEnrolledMess, setActiveTab
   const [showStopMess, setShowStopMess] = useState(false);
   const [messPaused, setMessPaused] = useState(false);
   const [selectedNewMess, setSelectedNewMess] = useState("");
+
+  const handleBookGuestMeal = () => {
+    if (!setStudents) return;
+    setStudents(prev => prev.map(s => {
+      if (s.id === student.id) {
+        return { ...s, guestMeals: (s.guestMeals || 0) + 1, balance: s.balance + 150, paid: false };
+      }
+      return s;
+    }));
+    showToast("Guest meal booked successfully! ₹150 added to your dues.");
+  };
 
   const handleChangeMess = () => {
     if (!selectedNewMess) return;
@@ -901,33 +955,49 @@ function StudentDashboard({ student, enrolledMess, setEnrolledMess, setActiveTab
           label="Mess Status"
           value={!isEnrolled ? "None" : messPaused ? "Paused" : "Active"}
           note={!isEnrolled ? "Not enrolled" : messPaused ? "Subscription paused" : enrolledMess?.name || student.plan}
-          color={!isEnrolled ? "#8a6040" : messPaused ? "#eab308" : "#22c55e"}
+          color={!isEnrolled ? "var(--text-muted)" : messPaused ? "#eab308" : "#22c55e"}
         />
         <StatCard label="Pending Dues" value={isPaid ? "₹0" : `₹${student.balance.toLocaleString()}`} note={isPaid ? "All cleared!" : "Please pay soon"} color={isPaid ? "#22c55e" : "#ef4444"} />
       </div>
 
       {/* MESS MANAGEMENT SECTION */}
       {isEnrolled && (
-        <div className="card" style={{ marginBottom: 20 }}>
-          <div className="section-title">Mess Management 🏢</div>
-          <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
-            <div style={{ flex: 1, minWidth: 200 }}>
-              <div style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 4 }}>Currently Enrolled</div>
-              <div style={{ fontSize: 18, fontWeight: 800, color: "#f97316" }}>{enrolledMess?.name || "HomeBite (Central)"}</div>
-              <div style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 2 }}>{enrolledMess?.plan} · {enrolledMess?.address}</div>
-            </div>
-            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-              {messPaused ? (
-                <button className="mess-action-btn" onClick={handleResumeMess}>▶️ Resume Mess</button>
-              ) : (
-                <>
-                  <button className="mess-action-btn" onClick={() => setShowChangeMess(true)}>🔄 Change Mess</button>
-                  <button className="mess-action-btn danger" onClick={() => setShowStopMess(true)}>⏹️ Pause Mess</button>
-                </>
-              )}
+        <>
+          <div className="card" style={{ marginBottom: 20 }}>
+            <div className="section-title">Mess Management 🏢</div>
+            <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
+              <div style={{ flex: 1, minWidth: 200 }}>
+                <div style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 4 }}>Currently Enrolled</div>
+                <div style={{ fontSize: 18, fontWeight: 800, color: "#f97316" }}>{enrolledMess?.name || "HomeBite (Central)"}</div>
+                <div style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 2 }}>{enrolledMess?.plan} · {enrolledMess?.address}</div>
+              </div>
+              <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                {messPaused ? (
+                  <button className="mess-action-btn" onClick={handleResumeMess}>▶️ Resume Mess</button>
+                ) : (
+                  <>
+                    <button className="mess-action-btn" onClick={() => setShowChangeMess(true)}>🔄 Change Mess</button>
+                    <button className="mess-action-btn danger" onClick={() => setShowStopMess(true)}>⏹️ Pause Mess</button>
+                  </>
+                )}
+              </div>
             </div>
           </div>
-        </div>
+          
+          <div className="card" style={{ marginBottom: 20 }}>
+            <div className="section-title">Guest Meal Booking 👥</div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: 14, background: "var(--meal-card)", border: "1px solid var(--card-border)", borderRadius: 10, flexWrap: "wrap", gap: 12 }}>
+              <div>
+                <div style={{ color: "var(--text)", fontWeight: 700, fontSize: 15, marginBottom: 4 }}>Book an extra meal</div>
+                <div style={{ color: "var(--text-sub)", fontSize: 13, lineHeight: 1.5 }}>
+                  Having a friend over? Book an extra meal for ₹150. This will be automatically added to your current dues.
+                </div>
+                {student.guestMeals > 0 && <div style={{ color: "#f97316", fontSize: 13, marginTop: 6, fontWeight: "bold" }}>You have booked {student.guestMeals} guest meal(s) today.</div>}
+              </div>
+              <button className="btn btn-primary" onClick={handleBookGuestMeal} disabled={messPaused}>+ Book Meal (₹150)</button>
+            </div>
+          </div>
+        </>
       )}
 
       <div className="grid-2">
@@ -1041,8 +1111,8 @@ function MenuPage({ user, showToast }) {
         <div className="enroll-icon">🏢</div>
         <div>
           <div style={{ fontSize: 11, fontWeight: 700, color: "#f97316", textTransform: "uppercase", letterSpacing: 1, marginBottom: 4 }}>You are enrolled in:</div>
-          <div style={{ fontSize: 22, fontWeight: 900, color: "#fdf3e3", fontFamily: "'Playfair Display', serif" }}>HomeBite (Central)</div>
-          <div style={{ display: "flex", gap: 16, marginTop: 6, fontSize: 13, color: "#8a6040" }}>
+          <div style={{ fontSize: 22, fontWeight: 900, color: "var(--text)", fontFamily: "'Playfair Display', serif" }}>HomeBite (Central)</div>
+          <div style={{ display: "flex", gap: 16, marginTop: 6, fontSize: 13, color: "var(--text-muted)" }}>
             <span>🕒 7:30 AM – 10:30 PM</span>
             <span>📍 Ground Floor, Central Block</span>
             <span>💳 Plan: Full Mess (₹3000/mo)</span>
@@ -1083,9 +1153,9 @@ function MenuPage({ user, showToast }) {
             <div key={m.key} style={{ display: "flex", gap: 16 }}>
               <div style={{ minWidth: 160 }}>
                 <div style={{ fontWeight: 700, color: "#f97316", fontSize: 14 }}>{m.label}</div>
-                <div style={{ fontSize: 11, color: "#7a5030", marginTop: 2 }}>{m.time}</div>
+                <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 2 }}>{m.time}</div>
               </div>
-              <div style={{ flex: 1, background: "#1a0f00", border: "1px solid #3d2000", borderRadius: 10, padding: "12px 16px", color: "#c49060", fontSize: 13.5, lineHeight: 1.7 }}>
+              <div style={{ flex: 1, background: "var(--bg)", border: "1px solid #3d2000", borderRadius: 10, padding: "12px 16px", color: "#c49060", fontSize: 13.5, lineHeight: 1.7 }}>
                 {editMode ? (
                   <textarea 
                     value={editValues[m.key] || ""} 
@@ -1117,7 +1187,7 @@ function MenuPage({ user, showToast }) {
             <tbody>
               {days.map(d => (
                 <tr key={d} style={{ background: d===today ? "#2c150011" : "transparent" }}>
-                  <td style={{ fontWeight: 700, color: d===today?"#f97316":"#f5c89a" }}>{d} {d===today?"🔴":""}</td>
+                  <td style={{ fontWeight: 700, color: d===today?"#f97316":"var(--text)" }}>{d} {d===today?"🔴":""}</td>
                   <td style={{ fontSize: 12 }}>{weekMenu[d].breakfast}</td>
                   <td style={{ fontSize: 12 }}>{weekMenu[d].lunch}</td>
                   <td style={{ fontSize: 12 }}>{weekMenu[d].dinner}</td>
@@ -1134,7 +1204,7 @@ function MenuPage({ user, showToast }) {
 function AIChatWidget({ inventory, students }) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { role:"ai", text:"Hey! HomeBite AI here. How can I help you today? Ask me about the menu, your dues, or stock levels! ✦" }
+    { role:"ai", text:"Hey! HomeBite AI Dietitian Coach here. How can I help you today? Ask me about smart nutrient tracking, healthy alternatives, today's menu, your dues, or stock levels! ✦" }
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -1151,14 +1221,17 @@ function AIChatWidget({ inventory, students }) {
     setMessages(prev => [...prev, { role:"user", text:q }]);
     setLoading(true);
 
-    setTimeout(() => {
-      let reply = "";
-      const lq = q.toLowerCase();
-      if(lq.includes("menu")) reply = "Today's menu looks delicious! We have special items scheduled for Lunch and Dinner. Check the 'Menu & Schedule' tab for the full breakdown! 🍽";
-      else if(lq.includes("stock") || lq.includes("inventory")) {
-        const low = inventory.filter(i => i.stock <= i.threshold);
-        reply = low.length > 0 ? `Stock Alert: We are running low on ${low.map(l=>l.name).join(", ")}. I've already notified the admin! 📦` : "Great news! All stock levels are currently healthy. ✅";
-      }
+      setTimeout(() => {
+        let reply = "";
+        const lq = q.toLowerCase();
+        if(lq.includes("menu")) reply = "Today's menu looks delicious! We have special items scheduled for Lunch and Dinner. Check the 'Menu & Schedule' tab for the full breakdown! 🍽";
+        else if(lq.includes("nutrient") || lq.includes("diet") || lq.includes("health") || lq.includes("calorie") || lq.includes("track") || lq.includes("protein")) {
+          reply = "Looking at today's menu, your lunch is approx 650 kcal with 18g of protein (from Dal/Paneer). Would you like me to log this in your Smart Nutrient Tracker? 🥗";
+        }
+        else if(lq.includes("stock") || lq.includes("inventory")) {
+          const low = inventory.filter(i => i.stock <= i.threshold);
+          reply = low.length > 0 ? `Stock Alert: We are running low on ${low.map(l=>l.name).join(", ")}. I've already notified the admin! 📦` : "Great news! All stock levels are currently healthy. ✅";
+        }
       else if(lq.includes("dues") || lq.includes("bill") || lq.includes("money")) {
         const unpaid = students.filter(s => !s.paid);
         reply = `There are currently ${unpaid.length} students with outstanding dues. The total pending amount is ₹${unpaid.reduce((a,b)=>a+b.balance,0).toLocaleString()}. 💳`;
@@ -1187,11 +1260,11 @@ function AIChatWidget({ inventory, students }) {
           <div className="ai-widget-body" ref={bodyRef}>
             {messages.map((m, i) => (
               <div key={i} className={`ai-msg-bubble ${m.role === 'ai' ? 'ai-msg-ai' : 'ai-msg-user'}`}>
-                {m.role === 'ai' && <div className="ai-msg-label">✦ HomeBite AI</div>}
+                {m.role === 'ai' && <div className="ai-msg-label">✦ HomeBite AI Dietitian</div>}
                 {m.text}
               </div>
             ))}
-            {loading && <div className="ai-msg-bubble ai-msg-ai"><div className="ai-msg-label">✦ HomeBite AI</div><span style={{ opacity: 0.6 }}>Thinking...</span></div>}
+            {loading && <div className="ai-msg-bubble ai-msg-ai"><div className="ai-msg-label">✦ HomeBite AI Dietitian</div><span style={{ opacity: 0.6 }}>Thinking...</span></div>}
           </div>
           <div className="ai-widget-footer">
             <div className="ai-widget-input-wrap">
@@ -1273,7 +1346,7 @@ function AttendancePage({ students, setStudents, showToast }) {
               {filtered.map(s => (
                 <tr key={s.id}>
                   <td><span className="tag">{s.id}</span></td>
-                  <td style={{ fontWeight: 600, color: "#f5c89a" }}>{s.name}</td>
+                  <td style={{ fontWeight: 600, color: "var(--text)" }}>{s.name}</td>
                   <td>{s.room}</td>
                   <td><span className="badge badge-blue">{s.plan}</span></td>
                   {["breakfast","lunch","dinner"].map(m => (
@@ -1338,11 +1411,11 @@ function InventoryPage({ inventory, setInventory, showToast }) {
               <div key={item.id} style={{ marginBottom: 16 }}>
                 <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
                   <div>
-                    <span style={{ fontWeight:600, color:"#f5c89a", fontSize:13 }}>{item.name}</span>
-                    <span style={{ fontSize:11, color:"#7a5030", marginLeft:8 }}>{item.category}</span>
+                    <span style={{ fontWeight:600, color:"var(--text)", fontSize:13 }}>{item.name}</span>
+                    <span style={{ fontSize:11, color:"var(--text-muted)", marginLeft:8 }}>{item.category}</span>
                   </div>
                   <div style={{ display:"flex", alignItems:"center", gap:8 }}>
-                    <span style={{ fontSize:12, color: isLow?"#ef4444":"#a07050" }}>{item.stock} / {item.capacity} {item.unit}</span>
+                    <span style={{ fontSize:12, color: isLow?"#ef4444":"var(--text-sub)" }}>{item.stock} / {item.capacity} {item.unit}</span>
                     {isLow && <span className="badge badge-red">Low</span>}
                     <button className="btn btn-ghost btn-sm" onClick={()=>restock(item.id)}>Restock</button>
                   </div>
@@ -1412,7 +1485,7 @@ function FeedbackPage({ user, showToast }) {
         <StatCard label="5-Star Reviews" value={allFeedbacks.filter(f=>f.rating===5).length} color="#22c55e" />
       </div>
 
-      <div className={user?.role === "admin" ? "" : "grid-2"}>
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(300px, 1fr))", gap:20 }}>
         {user?.role !== "admin" && (
           <div className="card">
             <div className="section-title">Submit Feedback</div>
@@ -1423,11 +1496,11 @@ function FeedbackPage({ user, showToast }) {
                 {days.flatMap(d => ["Breakfast","Lunch","Dinner"].map(m => <option key={`${d}-${m}`}>{d} {m}</option>))}
               </select>
               <div>
-                <div style={{ fontSize:12, color:"#7a5030", marginBottom:6 }}>Your Rating</div>
+                <div style={{ fontSize:12, color:"var(--text-muted)", marginBottom:6 }}>Your Rating</div>
                 <div style={{ display:"flex", gap:4 }}>
                   {[1,2,3,4,5].map(s => (
                     <span key={s} className="star"
-                      style={{ color: s<=(hover||rating)?"#eab308":"#3d2000" }}
+                      style={{ color: s<=(hover||rating)?"#eab308":"var(--card-border)" }}
                       onMouseEnter={()=>setHover(s)} onMouseLeave={()=>setHover(0)}
                       onClick={()=>setRating(s)}>★</span>
                   ))}
@@ -1441,15 +1514,15 @@ function FeedbackPage({ user, showToast }) {
 
         <div className="card">
           <div className="section-title">Recent Reviews</div>
-          <div style={{ display:"flex", flexDirection:"column", gap:12, maxHeight:380, overflowY:"auto" }}>
+          <div style={{ display:"flex", flexDirection:"column", gap:12, maxHeight:450, overflowY:"auto", paddingRight: 4 }}>
             {allFeedbacks.map(f => (
-              <div key={f.id} style={{ background:"#1a0f00", border:"1px solid #3d2000", borderRadius:10, padding:14 }}>
+              <div key={f.id} style={{ background:"var(--meal-card)", border:"1px solid var(--card-border)", borderRadius:10, padding:14 }}>
                 <div style={{ display:"flex", justifyContent:"space-between" }}>
-                  <span style={{ fontWeight:700, color:"#f5c89a", fontSize:13 }}>{f.student}</span>
+                  <span style={{ fontWeight:700, color:"var(--text)", fontSize:13 }}>{f.student}</span>
                   <span style={{ color:"#eab308" }}>{"★".repeat(f.rating)}{"☆".repeat(5-f.rating)}</span>
                 </div>
-                <div style={{ fontSize:11, color:"#7a5030", margin:"3px 0 6px" }}>{f.meal} · {f.time}</div>
-                {f.comment && <div style={{ fontSize:13, color:"#a07050" }}>"{f.comment}"</div>}
+                <div style={{ fontSize:11, color:"var(--text-muted)", margin:"3px 0 6px" }}>{f.meal} · {f.time}</div>
+                {f.comment && <div style={{ fontSize:13, color:"var(--text-sub)" }}>"{f.comment}"</div>}
               </div>
             ))}
           </div>
@@ -1460,14 +1533,13 @@ function FeedbackPage({ user, showToast }) {
 }
 
 function NearbyPage() {
-  const [hovered, setHovered] = useState(null);
   const [selected, setSelected] = useState(null);
   const [search, setSearch] = useState("");
 
   const typeColor = { Canteen:"#f97316", Restaurant:"#22c55e", Café:"#3b82f6", Grocery:"#eab308", Bakery:"#a78bfa" };
 
-  const filteredPlaces = nearbyPlaces.filter(p => 
-    p.name.toLowerCase().includes(search.toLowerCase()) || 
+  const filteredPlaces = nearbyPlaces.filter(p =>
+    p.name.toLowerCase().includes(search.toLowerCase()) ||
     p.type.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -1475,79 +1547,40 @@ function NearbyPage() {
     <div className="fade-in">
       <div className="page-header">
         <div className="page-title">Nearby Food Places 📍</div>
-        <div className="page-sub">Find food options near your hostel</div>
+        <div className="page-sub">Real-time map powered by OpenStreetMap · Pune, India</div>
       </div>
 
-      <div className="grid-2">
-        <div className="card" style={{ height: 480, position:"relative", padding:0, overflow:"hidden" }}>
-          {/* SVG Map Illustration */}
-          <svg width="100%" height="100%" viewBox="0 0 100 100" style={{ position:"absolute", inset:0 }}>
-            <rect width="100" height="100" fill="#1a0f00" />
-            {/* Road network */}
-            <line x1="0" y1="50" x2="100" y2="50" stroke="#3d2000" strokeWidth="3" />
-            <line x1="50" y1="0" x2="50" y2="100" stroke="#3d2000" strokeWidth="3" />
-            <line x1="0" y1="30" x2="100" y2="30" stroke="#2a1500" strokeWidth="1.5" />
-            <line x1="0" y1="70" x2="100" y2="70" stroke="#2a1500" strokeWidth="1.5" />
-            <line x1="30" y1="0" x2="30" y2="100" stroke="#2a1500" strokeWidth="1.5" />
-            <line x1="70" y1="0" x2="70" y2="100" stroke="#2a1500" strokeWidth="1.5" />
-            {/* Blocks */}
-            {[[5,5,18,18],[35,5,28,18],[68,5,27,18],[5,35,18,28],[68,35,27,28],[5,75,18,18],[35,75,28,18],[68,75,27,18]].map(([x,y,w,h],i) =>
-              <rect key={i} x={x} y={y} width={w} height={h} rx="2" fill="#251200" stroke="#3d2000" strokeWidth="0.5" />
-            )}
-            {/* Hostel marker */}
-            <circle cx="50" cy="50" r="4" fill="#f97316" />
-            <text x="50" y="46" textAnchor="middle" fontSize="3" fill="#f97316" fontWeight="bold">🏠 HomeBite</text>
-          </svg>
-          {/* Place pins */}
-          {filteredPlaces.map((p, i) => (
-            <div key={i}>
-              <div className="map-pin" style={{
-                left:`${p.x}%`, top:`${p.y}%`,
-                background: p.open ? (typeColor[p.type]||"#f97316") : "#5a3820",
-                transform: `translate(-50%,-50%) ${hovered===i?"scale(1.5)":"scale(1)"}`,
-                transition:"transform 0.2s"
-              }}
-                onMouseEnter={()=>setHovered(i)}
-                onMouseLeave={()=>setHovered(null)}
-                onClick={()=>setSelected(i===selected?null:i)}
-              />
-              {hovered===i && (
-                <div className="map-tooltip" style={{ left:`${p.x}%`, top:`${p.y}%` }}>
-                  {p.name} · {p.dist} · {p.rating}★
-                </div>
-              )}
-            </div>
-          ))}
-          <div style={{ position:"absolute", bottom:12, left:12, background:"#1a0f00aa", borderRadius:8, padding:"6px 12px", fontSize:11, color:"#7a5030", border:"1px solid #3d2000" }}>
-            🟠 You are here (HomeBite Hostel)
-          </div>
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(360px, 1fr))", gap:20 }}>
+        <div className="card" style={{ height: 480, position:"relative", padding:0, overflow:"hidden", borderRadius:16, minWidth:"100%" }}>
+          <ReactLeafletMap filteredPlaces={filteredPlaces} selected={selected} setSelected={setSelected} typeColor={typeColor} />
         </div>
 
         <div className="card">
           <div className="section-title" style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
             Nearby Locations
+            <span style={{ fontSize: 12, color:"var(--text-muted)", fontWeight:400, fontFamily:"'DM Sans',sans-serif" }}>{filteredPlaces.length} found</span>
           </div>
           <div style={{ marginBottom: 16 }}>
-            <input 
-              placeholder="Search by name or type..." 
-              value={search} 
-              onChange={e=>setSearch(e.target.value)} 
-              style={{ width: "100%" }} 
+            <input
+              placeholder="Search by name or type..."
+              value={search}
+              onChange={e=>setSearch(e.target.value)}
+              style={{ width: "100%" }}
             />
           </div>
-          <div style={{ display:"flex", flexDirection:"column", gap:10, maxHeight: 380, overflowY: "auto" }}>
-            {filteredPlaces.length === 0 && <div style={{ color: "#a07050", textAlign: "center", padding: 20 }}>No places found.</div>}
+          <div style={{ display:"flex", flexDirection:"column", gap:10, maxHeight: 360, overflowY: "auto" }}>
+            {filteredPlaces.length === 0 && <div style={{ color: "var(--text-sub)", textAlign: "center", padding: 20 }}>No places found.</div>}
             {filteredPlaces.map((p, i) => (
-              <div key={i} onClick={()=>setSelected(i===selected?null:i)}
-                style={{ background: selected===i?"#2c1500":"#1a0f00", border:`1px solid ${selected===i?"#f97316":"#3d2000"}`, borderRadius:12, padding:14, cursor:"pointer", transition:"all 0.2s" }}>
+              <div key={i} onClick={() => setSelected(i===selected?null:i)}
+                style={{ background: selected===i?"var(--input-bg)":"var(--bg)", border:`1px solid ${selected===i?"#f97316":"var(--card-border)"}`, borderRadius:12, padding:14, cursor:"pointer", transition:"all 0.2s" }}>
                 <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
                   <div>
-                    <div style={{ fontWeight:700, color:"#f5c89a", fontSize:13 }}>{p.name}</div>
-                    <div style={{ fontSize:11, color:"#7a5030", marginTop:2 }}>
-                      <span style={{ color: typeColor[p.type]||"#f97316" }}>{p.type}</span> · {p.dist}
+                    <div style={{ fontWeight:700, color:selected===i?"#f97316":"var(--text)", fontSize:13 }}>{p.name}</div>
+                    <div style={{ fontSize:11, color:"var(--text-muted)", marginTop:2 }}>
+                      <span style={{ color: typeColor[p.type]||"#f97316" }}>{p.type}</span> · {p.dist} · {p.address}
                     </div>
                   </div>
-                  <div style={{ textAlign:"right" }}>
+                  <div style={{ textAlign:"right", flexShrink:0, marginLeft:8 }}>
                     <div style={{ color:"#eab308", fontWeight:700 }}>★ {p.rating}</div>
                     <span className={"badge " + (p.open?"badge-green":"badge-red")}>{p.open?"Open":"Closed"}</span>
                   </div>
@@ -1556,6 +1589,85 @@ function NearbyPage() {
             ))}
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function ReactLeafletMap({ filteredPlaces, selected, setSelected, typeColor }) {
+  const mapRef = useRef(null);
+
+  useEffect(() => {
+    // Load Leaflet CSS
+    if (!document.getElementById("leaflet-css")) {
+      const link = document.createElement("link");
+      link.id = "leaflet-css";
+      link.rel = "stylesheet";
+      link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+      document.head.appendChild(link);
+    }
+
+    // Wait for Leaflet CSS then init map
+    const initMap = () => {
+      if (!window.L || mapRef.current?._leaflet_id) return;
+      const L = window.L;
+
+      const map = L.map(mapRef.current, { zoomControl: true }).setView([HOSTEL_LAT, HOSTEL_LNG], 16);
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 19,
+      }).addTo(map);
+
+      // HomeBite marker
+      const hostelIcon = L.divIcon({
+        className: "",
+        html: `<div style="background:#f97316;width:18px;height:18px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 10px #f97316aa;"></div>`,
+        iconSize: [18, 18], iconAnchor: [9, 9]
+      });
+      L.marker([HOSTEL_LAT, HOSTEL_LNG], { icon: hostelIcon })
+        .addTo(map)
+        .bindPopup("<b>🏠 HomeBite Hostel</b><br/>You are here")
+        .openPopup();
+
+      // Place markers
+      filteredPlaces.forEach((p, i) => {
+        const color = p.open ? (typeColor[p.type] || "#f97316") : "#888888";
+        const icon = L.divIcon({
+          className: "",
+          html: `<div style="background:${color};width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px ${color}88;cursor:pointer;"></div>`,
+          iconSize: [14, 14], iconAnchor: [7, 7]
+        });
+        L.marker([p.lat, p.lng], { icon })
+          .addTo(map)
+          .bindPopup(`<b>${p.name}</b><br/><span style="color:${color};font-weight:600">${p.type}</span> · ${p.dist}<br/>★ ${p.rating} · ${p.open ? "Open ✅" : "Closed ❌"}<br/><small>${p.address}</small>`);
+      });
+
+      mapRef.current._leafletMap = map;
+    };
+
+    // Load Leaflet JS if not already loaded
+    if (!window.L) {
+      const script = document.createElement("script");
+      script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+      script.onload = initMap;
+      document.head.appendChild(script);
+    } else {
+      initMap();
+    }
+
+    return () => {
+      if (mapRef.current?._leafletMap) {
+        mapRef.current._leafletMap.remove();
+        delete mapRef.current._leafletMap;
+      }
+    };
+  }, []);
+
+  return (
+    <div ref={mapRef} style={{ height: "100%", width: "100%", borderRadius: 16 }}>
+      <div style={{ display:"flex", alignItems:"center", justifyContent:"center", height:"100%", color:"var(--text-muted)", fontSize:13 }}>
+        Loading real map...
       </div>
     </div>
   );
@@ -1592,10 +1704,10 @@ function RSVPPage({ showToast }) {
             <div className="section-title" style={{ textTransform: "capitalize" }}>{day}'s Meals</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {["breakfast", "lunch", "dinner"].map(meal => (
-                <div key={meal} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#1a0f00", border: "1px solid #3d2000", padding: "14px", borderRadius: "10px" }}>
+                <div key={meal} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "var(--bg)", border: "1px solid #3d2000", padding: "14px", borderRadius: "10px" }}>
                   <div>
-                    <div style={{ fontWeight: 600, color: "#f5c89a", textTransform: "capitalize", fontSize: 14 }}>{meal}</div>
-                    <div style={{ fontSize: 11, color: "#7a5030", marginTop: 4 }}>
+                    <div style={{ fontWeight: 600, color: "var(--text)", textTransform: "capitalize", fontSize: 14 }}>{meal}</div>
+                    <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4 }}>
                       {rsvpState[day][meal] ? "✅ You are attending" : "❌ You are skipping"}
                     </div>
                   </div>
@@ -1663,17 +1775,17 @@ function OffersPage({ user, offers, setOffers, showToast }) {
         <div className="card" style={{ maxWidth: user?.role === "admin" ? "none" : 800, margin: user?.role === "admin" ? 0 : "0 auto" }}>
           <div className="section-title">Active Offers</div>
           {offers.length === 0 ? (
-            <div style={{ color:"#a07050" }}>No active offers at the moment. Check back later!</div>
+            <div style={{ color:"var(--text-sub)" }}>No active offers at the moment. Check back later!</div>
           ) : (
             <div style={{ display:"flex", flexDirection:"column", gap:16 }}>
               {offers.map(o => (
-                <div key={o.id} style={{ border:"1px solid #f97316", background:"#2c1500", padding:16, borderRadius:12, position:"relative" }}>
+                <div key={o.id} style={{ border:"1px solid #f97316", background:"var(--input-bg)", padding:16, borderRadius:12, position:"relative" }}>
                   <div style={{ fontWeight:700, fontSize:16, color:"#f97316", marginBottom:4 }}>{o.title}</div>
-                  <div style={{ color:"#d4a57a", fontSize:13, lineHeight:1.5, marginBottom:12 }}>{o.description}</div>
+                  <div style={{ color:"var(--text-sub)", fontSize:13, lineHeight:1.5, marginBottom:12 }}>{o.description}</div>
                   <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", flexWrap:"wrap", gap:10 }}>
                     <div style={{ display:"flex", gap:12, alignItems:"center" }}>
                       {o.code && <span className="badge badge-green" style={{ fontSize:12 }}>{o.code}</span>}
-                      {o.validTill && <span style={{ fontSize:11, color:"#a07050" }}>Valid till: {o.validTill}</span>}
+                      {o.validTill && <span style={{ fontSize:11, color:"var(--text-sub)" }}>Valid till: {o.validTill}</span>}
                     </div>
                     {user?.role === "admin" ? (
                       <button className="btn btn-ghost btn-sm" onClick={()=>deleteOffer(o.id)} style={{ color:"#ef4444" }}>Delete</button>
@@ -1712,7 +1824,7 @@ function UserProfilePage({ profile, setProfile, showToast }) {
         <div style={{ textAlign: "center" }}>
           <div className="user-avatar-large" style={{ margin: "0 auto 20px" }}>🎒</div>
           <div style={{ fontSize: 20, fontWeight: 900, color: "#f97316", fontFamily: "'Playfair Display', serif" }}>{profile.name}</div>
-          <div style={{ fontSize: 13, color: "#8a6040", marginTop: 4 }}>ID: {profile.id}</div>
+          <div style={{ fontSize: 13, color: "var(--text-muted)", marginTop: 4 }}>ID: {profile.id}</div>
           <button className="btn btn-ghost" style={{ marginTop: 20, width: "100%" }} onClick={() => setEdit(!edit)}>{edit ? "Cancel Edit" : "Edit Profile"}</button>
         </div>
 
@@ -1722,19 +1834,19 @@ function UserProfilePage({ profile, setProfile, showToast }) {
             <div className="grid-2">
               <div className="profile-field">
                 <label>Full Name</label>
-                {edit ? <input value={form.name} onChange={e=>setForm({...form,name:e.target.value})} /> : <div style={{ color:"#f5c89a" }}>{profile.name}</div>}
+                {edit ? <input value={form.name} onChange={e=>setForm({...form,name:e.target.value})} /> : <div style={{ color:"var(--text)" }}>{profile.name}</div>}
               </div>
               <div className="profile-field">
                 <label>Home Address</label>
-                {edit ? <textarea value={form.address} onChange={e=>setForm({...form,address:e.target.value})} /> : <div style={{ color:"#f5c89a" }}>{profile.address}</div>}
+                {edit ? <textarea value={form.address} onChange={e=>setForm({...form,address:e.target.value})} /> : <div style={{ color:"var(--text)" }}>{profile.address}</div>}
               </div>
               <div className="profile-field">
                 <label>Current Location</label>
-                {edit ? <input value={form.location} onChange={e=>setForm({...form,location:e.target.value})} /> : <div style={{ color:"#f5c89a" }}>{profile.location}</div>}
+                {edit ? <input value={form.location} onChange={e=>setForm({...form,location:e.target.value})} /> : <div style={{ color:"var(--text)" }}>{profile.location}</div>}
               </div>
               <div className="profile-field">
                 <label>Contact Email</label>
-                {edit ? <input value={form.email} onChange={e=>setForm({...form,email:e.target.value})} /> : <div style={{ color:"#f5c89a" }}>{profile.email}</div>}
+                {edit ? <input value={form.email} onChange={e=>setForm({...form,email:e.target.value})} /> : <div style={{ color:"var(--text)" }}>{profile.email}</div>}
               </div>
             </div>
             {edit && <button className="btn btn-primary" onClick={save} style={{ marginTop:10 }}>Save Changes</button>}
@@ -1744,11 +1856,11 @@ function UserProfilePage({ profile, setProfile, showToast }) {
             <div className="section-title">Payment Options 💳</div>
             <div style={{ display:"flex", gap:12, flexWrap:"wrap" }}>
               {["Visa ending in 4242", "UPI: aanyasharma@okaxis", "Apple Pay"].map((p, i) => (
-                <div key={i} style={{ background: "#251200", border: "1px solid #3d2000", padding: "12px 16px", borderRadius: 12, display: "flex", alignItems: "center", gap: 10 }}>
+                <div key={i} style={{ background: "var(--card-bg)", border: "1px solid #3d2000", padding: "12px 16px", borderRadius: 12, display: "flex", alignItems: "center", gap: 10 }}>
                   <span style={{ fontSize: 20 }}>{p.includes("UPI") ? "📱" : "💳"}</span>
                   <div>
-                    <div style={{ fontSize: 13, color: "#f5c89a", fontWeight: 600 }}>{p}</div>
-                    <div style={{ fontSize: 11, color: "#7a5030" }}>Primary Method</div>
+                    <div style={{ fontSize: 13, color: "var(--text)", fontWeight: 600 }}>{p}</div>
+                    <div style={{ fontSize: 11, color: "var(--text-muted)" }}>Primary Method</div>
                   </div>
                 </div>
               ))}
@@ -1821,7 +1933,7 @@ function MessDirectoryPage({ showToast }) {
 
         <div style={{ display:"flex", flexDirection:"column", gap:16 }}>
           {filteredMesses.map(m => (
-            <div key={m.id} onClick={() => setExpandedId(expandedId === m.id ? null : m.id)} style={{ background:"#1a0f00", border:`1px solid ${expandedId === m.id ? "#f97316" : "#3d2000"}`, padding:16, borderRadius:12, cursor:"pointer", transition:"all 0.2s" }}>
+            <div key={m.id} onClick={() => setExpandedId(expandedId === m.id ? null : m.id)} style={{ background:"var(--bg)", border:`1px solid ${expandedId === m.id ? "#f97316" : "var(--card-border)"}`, padding:16, borderRadius:12, cursor:"pointer", transition:"all 0.2s" }}>
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", flexWrap:"wrap", gap:10 }}>
                 <div style={{ display: "flex", gap: 16 }}>
                   {m.img && (
@@ -1829,13 +1941,13 @@ function MessDirectoryPage({ showToast }) {
                   )}
                   <div>
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                      <div style={{ fontWeight:700, fontSize:16, color:"#f5c89a" }}>{m.name}</div>
+                      <div style={{ fontWeight:700, fontSize:16, color:"var(--text)" }}>{m.name}</div>
                       <span className={"badge " + (m.isVeg ? "badge-green" : "badge-red")} style={{ padding: "1px 6px", fontSize: 9 }}>{m.isVeg ? "VEG" : "NON-VEG"}</span>
                     </div>
-                    <div style={{ fontSize:12, color:"#d4a57a", marginBottom:4 }}>{m.type} · {m.distance}</div>
-                    <div style={{ fontSize:12, color:"#a07050", marginBottom:12 }}>📍 {m.address}</div>
+                    <div style={{ fontSize:12, color:"var(--text-sub)", marginBottom:4 }}>{m.type} · {m.distance}</div>
+                    <div style={{ fontSize:12, color:"var(--text-sub)", marginBottom:12 }}>📍 {m.address}</div>
                     
-                    <div style={{ display:"flex", gap:16, fontSize:13, color:"#a07050" }}>
+                    <div style={{ display:"flex", gap:16, fontSize:13, color:"var(--text-sub)" }}>
                       <div><span style={{color:"#f97316"}}>🌅 Opens:</span> {m.open}</div>
                       <div><span style={{color:"#f97316"}}>🌙 Closes:</span> {m.close}</div>
                     </div>
@@ -1849,19 +1961,23 @@ function MessDirectoryPage({ showToast }) {
               </div>
               
               {expandedId === m.id && (
-                <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px dashed #3d2000", animation: "fadeIn 0.3s ease-out" }}>
-                  <div className="grid-3" style={{ gap: 12 }}>
-                    <div style={{ background: "#251200", padding: 12, borderRadius: 8 }}>
+                <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px dashed var(--card-border)", animation: "fadeIn 0.3s ease-out" }}>
+                  <div className="grid-3" style={{ gap: 12, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))" }}>
+                    <div style={{ background: "var(--card-bg)", padding: 12, borderRadius: 8, border: "1px solid var(--card-border)" }}>
                       <div style={{ color: "#f97316", fontWeight: 700, fontSize: 13, marginBottom: 4 }}>📋 Meal Plan</div>
-                      <div style={{ color: "#d4a57a", fontSize: 13 }}>{m.plan}</div>
+                      <div style={{ color: "var(--text-sub)", fontSize: 13 }}>{m.plan}</div>
                     </div>
-                    <div style={{ background: "#251200", padding: 12, borderRadius: 8 }}>
+                    <div style={{ background: "var(--card-bg)", padding: 12, borderRadius: 8, border: "1px solid var(--card-border)" }}>
                       <div style={{ color: "#22c55e", fontWeight: 700, fontSize: 13, marginBottom: 4 }}>🎁 Offers & Deals</div>
-                      <div style={{ color: "#d4a57a", fontSize: 13 }}>{m.offers.join(", ")}</div>
+                      <div style={{ color: "var(--text-sub)", fontSize: 13 }}>{m.offers.join(", ")}</div>
                     </div>
-                    <div style={{ background: "#251200", padding: 12, borderRadius: 8 }}>
+                    <div style={{ background: "var(--card-bg)", padding: 12, borderRadius: 8, border: "1px solid var(--card-border)" }}>
                       <div style={{ color: "#eab308", fontWeight: 700, fontSize: 13, marginBottom: 4 }}>🍽 Menu Highlights</div>
-                      <div style={{ color: "#d4a57a", fontSize: 13 }}>{m.menu}</div>
+                      <div style={{ color: "var(--text-sub)", fontSize: 13 }}>{m.menu}</div>
+                    </div>
+                    <div style={{ background: "var(--card-bg)", padding: 12, borderRadius: 8, border: "1px solid var(--card-border)" }}>
+                      <div style={{ color: "#3b82f6", fontWeight: 700, fontSize: 13, marginBottom: 4 }}>📞 Contact Details</div>
+                      <div style={{ color: "var(--text-sub)", fontSize: 13 }}>{m.contact}</div>
                     </div>
                   </div>
                   <div style={{ marginTop: 16, textAlign: "right" }}>
@@ -1886,7 +2002,7 @@ function MessDirectoryPage({ showToast }) {
         <div className="modal-overlay" onClick={() => setShowEnrollModal(false)}>
           <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div className="section-title" style={{ fontSize: 24, textAlign: "center", marginBottom: 20 }}>Enroll & Sign In 🍽</div>
-            <p style={{ color: "#8a6040", fontSize: 13, textAlign: "center", marginBottom: 24 }}>Enter your details to enroll in this mess and create your student account.</p>
+            <p style={{ color: "var(--text-muted)", fontSize: 13, textAlign: "center", marginBottom: 24 }}>Enter your details to enroll in this mess and create your student account.</p>
             <form onSubmit={handleEnroll} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               <input placeholder="Full Name" value={enrollForm.name} onChange={e=>setEnrollForm({...enrollForm,name:e.target.value})} required />
               <input type="email" placeholder="Email Address" value={enrollForm.email} onChange={e=>setEnrollForm({...enrollForm,email:e.target.value})} required />
@@ -1970,8 +2086,56 @@ function SettingsPage({ theme, setTheme }) {
 
 // ─── LOGIN ───────────────────────────────────────────────────────────────────
 
-function LoginPage({ onLogin }) {
-  const [role, setRole] = useState(null);
+function AdminLoginPage({ onLogin, onBack }) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    if (!username || !password) return setError("Please enter username and password.");
+    const res = await db.login(username, password);
+    if (res.success && res.role === "admin") {
+      onLogin("admin", res.id);
+    } else {
+      setError(res.message || "Invalid Admin credentials");
+    }
+  };
+
+  return (
+    <div style={{ display:"flex", justifyContent:"center", alignItems:"center", minHeight:"100vh", background:"url('/homefood_bg.png') center/cover no-repeat", position: "relative", width:"100vw" }}>
+      <div style={{ position: "absolute", inset: 0, background: "rgba(20, 10, 0, 0.8)", zIndex: 0 }} />
+      <style>{getStyle('dark')}</style>
+      <div className="card" style={{ width: 400, position: "relative", zIndex: 1, padding: 32, borderTop: "4px solid #eab308", borderBottom: "4px solid #eab308", boxShadow: "0 24px 64px rgba(234, 179, 8, 0.15)" }}>
+        <button className="btn btn-ghost btn-sm" onClick={onBack} style={{ position: "absolute", top: 16, left: 16, padding: "4px 8px" }}>← Back</button>
+        <div style={{ textAlign: "center", marginBottom: 24, marginTop: 12 }}>
+          <div style={{ fontSize: 48, marginBottom: 8 }}>🛡️</div>
+          <h2 style={{ margin: 0, color: "#eab308", fontFamily: "'Playfair Display', serif", fontSize: 26 }}>Admin Portal Access</h2>
+          <div style={{ color: "var(--text-sub)", fontSize: 13, marginTop: 4 }}>Restricted area for authorized personnel</div>
+        </div>
+        
+        {error && <div style={{ background: "rgba(220, 38, 38, 0.1)", color: "#f87171", padding: 12, borderRadius: 8, fontSize: 13, marginBottom: 20, border: "1px solid rgba(220, 38, 38, 0.3)", textAlign: "center" }}>{error}</div>}
+
+        <form onSubmit={handleLogin} style={{ display:"flex", flexDirection:"column", gap:16 }}>
+          <div>
+            <label style={{ fontSize: 12, color: "var(--text-sub)", marginLeft: 4, fontWeight: 600 }}>Administrator Username <span style={{color:"#ef4444"}}>*</span></label>
+            <input placeholder="Enter admin username" value={username} onChange={e=>setUsername(e.target.value)} style={{ marginTop: 6, padding: "12px 16px" }} required />
+          </div>
+          <div>
+            <label style={{ fontSize: 12, color: "var(--text-sub)", marginLeft: 4, fontWeight: 600 }}>Authorized Password <span style={{color:"#ef4444"}}>*</span></label>
+            <input type="password" placeholder="••••••••••••" value={password} onChange={e=>setPassword(e.target.value)} style={{ marginTop: 6, padding: "12px 16px" }} required />
+          </div>
+          <button type="submit" className="btn btn-primary" style={{ marginTop: 12, padding: "14px", fontSize: 15, background: "#eab308", color: "var(--bg)", border: "none" }}>Secure Login</button>
+        </form>
+        <div style={{ marginTop: 20, fontSize: 11, color: "var(--text-muted)", textAlign: "center" }}>
+          Hint: User "admin", password "admin123"
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StudentLoginPage({ onLogin, onBack }) {
   const [isSignUp, setIsSignUp] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -1983,107 +2147,108 @@ function LoginPage({ onLogin }) {
     setError("");
     
     if (isSignUp) {
-      if (!username || !password || !name) {
-        return setError("Please fill all fields to sign up.");
-      }
+      if (!username || !password || !name) return setError("Please fill all required fields.");
       const res = await db.signup({ username, password, name, role: "student" });
-      if (res.success) {
-        onLogin(res.role, res.id);
-      } else {
-        setError(res.message);
-      }
+      if (res.success) onLogin(res.role, res.id);
+      else setError(res.message);
     } else {
+      if (!username || !password) return setError("Please enter username and password.");
       const res = await db.login(username, password);
-      if (res.success) {
-        onLogin(res.role, res.id);
-      } else {
-        setError(res.message);
-      }
+      if (res.success && res.role === "student") onLogin(res.role, res.id);
+      else setError(res.message || "Invalid Student credentials");
     }
   };
 
-  if (!role) {
-    return (
-      <div style={{ display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", minHeight:"100vh", background:"url('/login_bg.png') center/cover no-repeat", position: "relative", width:"100vw" }}>
-        <div style={{ position: "absolute", inset: 0, background: "rgba(26,15,0,0.88)", zIndex: 0 }} />
-        <style>{getStyle('dark')}</style>
-        <div style={{ textAlign:"center", marginBottom:48, position: "relative", zIndex: 1 }}>
-          <div className="logo-title" style={{ fontSize:44 }}>HomeBite</div>
-          <div className="logo-sub" style={{ fontSize:14, letterSpacing: 3 }}>Select Your Portal</div>
-        </div>
-        <div style={{ display:"flex", gap:24, flexWrap:"wrap", justifyContent:"center", position: "relative", zIndex: 1 }}>
-          <div
-            className="card"
-            style={{ width: 240, cursor:"pointer", textAlign:"center", transition:"transform 0.25s, box-shadow 0.25s", borderTop: "3px solid #f97316" }}
-            onClick={() => setRole("student")}
-            onMouseEnter={e => { e.currentTarget.style.transform="translateY(-6px)"; e.currentTarget.style.boxShadow="0 20px 40px rgba(249,115,22,0.25)"; }}
-            onMouseLeave={e => { e.currentTarget.style.transform=""; e.currentTarget.style.boxShadow=""; }}
-          >
-            <div style={{ fontSize:54, marginBottom:16, filter: "drop-shadow(0 4px 8px rgba(249,115,22,0.4))" }}>🍽️</div>
-            <div className="section-title" style={{ color:"#f97316", margin:0 }}>User Portal</div>
-            <div style={{ fontSize: 12, color: "#8a6040", marginTop: 6 }}>Students & Residents</div>
-          </div>
-          <div
-            className="card"
-            style={{ width: 240, cursor:"pointer", textAlign:"center", transition:"transform 0.25s, box-shadow 0.25s", borderTop: "3px solid #eab308" }}
-            onClick={() => setRole("admin")}
-            onMouseEnter={e => { e.currentTarget.style.transform="translateY(-6px)"; e.currentTarget.style.boxShadow="0 20px 40px rgba(234,179,8,0.25)"; }}
-            onMouseLeave={e => { e.currentTarget.style.transform=""; e.currentTarget.style.boxShadow=""; }}
-          >
-            <div style={{ fontSize:54, marginBottom:16, filter: "drop-shadow(0 4px 8px rgba(234,179,8,0.4))" }}>🛡️</div>
-            <div className="section-title" style={{ color:"#eab308", margin:0 }}>Admin Portal</div>
-            <div style={{ fontSize: 12, color: "#8a6040", marginTop: 6 }}>Managers & Staff</div>
-          </div>
-        </div>
-        <div style={{ position: "relative", zIndex: 1, marginTop: 40, fontSize: 12, color: "#5a3820", textAlign: "center" }}>
-          Powered by HomeBite v1.0 · Real-time Backend Active
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div style={{ display:"flex", justifyContent:"center", alignItems:"center", minHeight:"100vh", background:"url('/login_bg.png') center/cover no-repeat", position: "relative", width:"100vw" }}>
-      <div style={{ position: "absolute", inset: 0, background: "rgba(26,15,0,0.85)", zIndex: 0 }} />
+    <div style={{ display:"flex", justifyContent:"center", alignItems:"center", minHeight:"100vh", background:"url('/homefood_bg.png') center/cover no-repeat", position: "relative", width:"100vw" }}>
+      <div style={{ position: "absolute", inset: 0, background: "rgba(26,15,0,0.75)", zIndex: 0 }} />
       <style>{getStyle('dark')}</style>
-      <div className="card" style={{ width: 340, position: "relative", zIndex: 1 }}>
-        <div style={{ display:"flex", alignItems:"center", marginBottom: 20 }}>
-          <button className="btn btn-ghost btn-sm" onClick={() => { setRole(null); setIsSignUp(false); setError(""); setUsername(""); setPassword(""); }} style={{ padding:"4px 8px" }}>← Back</button>
-          <div className="section-title" style={{ flex:1, textAlign:"center", fontSize:20, color: role==="admin"?"#eab308":"#f97316", margin:0, paddingRight:40 }}>
-            {role === "admin" ? "Admin Login" : (isSignUp ? "User Sign Up" : "User Login")}
-          </div>
+      <div className="card" style={{ width: 360, position: "relative", zIndex: 1, padding: 32, boxShadow: "0 24px 64px rgba(249, 115, 22, 0.15)", borderTop: "4px solid #f97316" }}>
+        <button className="btn btn-ghost btn-sm" onClick={onBack} style={{ position: "absolute", top: 16, left: 16, padding: "4px 8px" }}>← Back</button>
+        <div style={{ textAlign: "center", marginBottom: 24, marginTop: 12 }}>
+          <div style={{ fontSize: 44, marginBottom: 8, filter: "drop-shadow(0 4px 8px rgba(249,115,22,0.4))" }}>🍽️</div>
+          <h2 style={{ margin: 0, color: "#f97316", fontFamily: "'Playfair Display', serif", fontSize: 24 }}>{isSignUp ? "Create Account" : "Student Login"}</h2>
+          <div style={{ color: "var(--text-sub)", fontSize: 13, marginTop: 4 }}>Access your mess dashboard</div>
         </div>
         
-        {error && <div style={{ background:"#7f1d1d33", color:"#f87171", padding:10, borderRadius:8, fontSize:12, marginBottom:16, border:"1px solid #dc262644" }}>{error}</div>}
+        {error && <div style={{ background:"rgba(220, 38, 38, 0.1)", color:"#f87171", padding:12, borderRadius:8, fontSize:13, marginBottom:16, border:"1px solid rgba(220, 38, 38, 0.3)", textAlign: "center" }}>{error}</div>}
 
         <form onSubmit={handleLogin} style={{ display:"flex", flexDirection:"column", gap:14 }}>
           {isSignUp && (
             <div>
-              <label style={{ fontSize:12, color:"#d4a57a", marginLeft:4 }}>Full Name</label>
-              <input placeholder="Aanya Sharma" value={name} onChange={e=>setName(e.target.value)} style={{ marginTop:4 }} />
+              <label style={{ fontSize:12, color:"var(--text-sub)", marginLeft:4, fontWeight: 600 }}>Full Name <span style={{color:"#ef4444"}}>*</span></label>
+              <input placeholder="Aanya Sharma" value={name} onChange={e=>setName(e.target.value)} style={{ marginTop:6 }} required />
             </div>
           )}
           <div>
-            <label style={{ fontSize:12, color:"#d4a57a", marginLeft:4 }}>{role === "admin" ? "Admin Username" : "User ID"}</label>
-            <input placeholder={role === "admin" ? "admin" : "HB001"} value={username} onChange={e=>setUsername(e.target.value)} style={{ marginTop:4 }} />
+            <label style={{ fontSize:12, color:"var(--text-sub)", marginLeft:4, fontWeight: 600 }}>{isSignUp ? "Choose User ID" : "User ID"} <span style={{color:"#ef4444"}}>*</span></label>
+            <input placeholder="E.g., HB001" value={username} onChange={e=>setUsername(e.target.value)} style={{ marginTop:6 }} required />
           </div>
           <div>
-            <label style={{ fontSize:12, color:"#d4a57a", marginLeft:4 }}>Password</label>
-            <input type="password" placeholder="••••••••" value={password} onChange={e=>setPassword(e.target.value)} style={{ marginTop:4 }} />
+            <label style={{ fontSize:12, color:"var(--text-sub)", marginLeft:4, fontWeight: 600 }}>Password <span style={{color:"#ef4444"}}>*</span></label>
+            <input type="password" placeholder="••••••••" value={password} onChange={e=>setPassword(e.target.value)} style={{ marginTop:6 }} required />
           </div>
-          <button type="submit" className="btn btn-primary" style={{ marginTop: 8 }}>{isSignUp ? "Sign Up" : "Sign In"}</button>
+          <button type="submit" className="btn btn-primary" style={{ marginTop: 10, padding: 12, fontSize: 14 }}>{isSignUp ? "Sign Up Now" : "Sign In"}</button>
         </form>
-        {role !== "admin" && (
-          <div style={{ marginTop: 16, fontSize:12, color:"#d4a57a", textAlign:"center", cursor:"pointer", textDecoration:"underline" }} onClick={()=>{setIsSignUp(!isSignUp); setError("");}}>
-            {isSignUp ? "Already have an account? Sign In" : "Don't have an account? Sign Up"}
-          </div>
-        )}
-        <div style={{ marginTop: 8, fontSize:11, color:"#7a5030", textAlign:"center" }}>
-          {role === "admin" ? "Hint: admin / admin123" : "Hint: HB001 / anything"}
+        <div style={{ marginTop: 24, fontSize:13, color:"var(--text-sub)", textAlign:"center" }}>
+          {isSignUp ? "Already have an account?" : "Don't have an account?"} <span style={{ color: "#f97316", fontWeight: "bold", cursor:"pointer", textDecoration:"underline" }} onClick={()=>{setIsSignUp(!isSignUp); setError("");}}>
+            {isSignUp ? "Sign In" : "Sign Up"}
+          </span>
+        </div>
+        <div style={{ marginTop: 12, fontSize:11, color:"var(--text-muted)", textAlign:"center" }}>
+          Hint: User "HB001" / any password
         </div>
       </div>
     </div>
   );
+}
+
+function PortalSelector({ onSelect }) {
+  return (
+    <div style={{ display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", minHeight:"100vh", background:"url('/homefood_bg.png') center/cover no-repeat", position: "relative", width:"100vw" }}>
+      <div style={{ position: "absolute", inset: 0, background: "rgba(26,15,0,0.7)", zIndex: 0 }} />
+      <style>{getStyle('dark')}</style>
+      <div style={{ textAlign:"center", marginBottom:48, position: "relative", zIndex: 1 }}>
+        <div className="logo-title" style={{ fontSize:52, marginBottom: 8 }}>HomeBite</div>
+        <div className="logo-sub" style={{ fontSize:15, letterSpacing: 4, color:"var(--text-sub)" }}>SELECT YOUR PORTAL</div>
+      </div>
+      <div style={{ display:"flex", gap:32, flexWrap:"wrap", justifyContent:"center", position: "relative", zIndex: 1 }}>
+        <div
+          className="card"
+          style={{ width: 260, padding: 32, cursor:"pointer", textAlign:"center", transition:"all 0.3s cubic-bezier(0.4, 0, 0.2, 1)", borderTop: "4px solid #f97316", background: "rgba(37, 18, 0, 0.8)", backdropFilter: "blur(10px)" }}
+          onClick={() => onSelect("student")}
+          onMouseEnter={e => { e.currentTarget.style.transform="translateY(-10px)"; e.currentTarget.style.boxShadow="0 24px 48px rgba(249,115,22,0.3)"; e.currentTarget.style.background="var(--sidebar-bg)"; }}
+          onMouseLeave={e => { e.currentTarget.style.transform=""; e.currentTarget.style.boxShadow=""; e.currentTarget.style.background="rgba(37, 18, 0, 0.8)"; }}
+        >
+          <div style={{ fontSize:64, marginBottom:20, filter: "drop-shadow(0 8px 16px rgba(249,115,22,0.4))" }}>🍽️</div>
+          <div className="section-title" style={{ color:"#f97316", margin:0, fontSize: 22 }}>Student Portal</div>
+          <div style={{ fontSize: 13, color: "var(--text-sub)", marginTop: 8, lineHeight: 1.5 }}>View menus, track dues, and order meals</div>
+        </div>
+        <div
+          className="card"
+          style={{ width: 260, padding: 32, cursor:"pointer", textAlign:"center", transition:"all 0.3s cubic-bezier(0.4, 0, 0.2, 1)", borderTop: "4px solid #eab308", background: "rgba(37, 18, 0, 0.8)", backdropFilter: "blur(10px)" }}
+          onClick={() => onSelect("admin")}
+          onMouseEnter={e => { e.currentTarget.style.transform="translateY(-10px)"; e.currentTarget.style.boxShadow="0 24px 48px rgba(234,179,8,0.3)"; e.currentTarget.style.background="var(--sidebar-bg)"; }}
+          onMouseLeave={e => { e.currentTarget.style.transform=""; e.currentTarget.style.boxShadow=""; e.currentTarget.style.background="rgba(37, 18, 0, 0.8)"; }}
+        >
+          <div style={{ fontSize:64, marginBottom:20, filter: "drop-shadow(0 8px 16px rgba(234,179,8,0.4))" }}>🛡️</div>
+          <div className="section-title" style={{ color:"#eab308", margin:0, fontSize: 22 }}>Admin Portal</div>
+          <div style={{ fontSize: 13, color: "var(--text-sub)", marginTop: 8, lineHeight: 1.5 }}>Manage inventory, users, and mess plans</div>
+        </div>
+      </div>
+      <div style={{ position: "relative", zIndex: 1, marginTop: 48, fontSize: 12, color: "#5a3820", textAlign: "center" }}>
+        Powered by HomeBite v1.2 · Real-time Backend Active
+      </div>
+    </div>
+  );
+}
+
+function LoginPage({ onLogin }) {
+  const [portalSelect, setPortalSelect] = useState(null);
+
+  if (!portalSelect) return <PortalSelector onSelect={setPortalSelect} />;
+  if (portalSelect === "admin") return <AdminLoginPage onLogin={onLogin} onBack={() => setPortalSelect(null)} />;
+  return <StudentLoginPage onLogin={onLogin} onBack={() => setPortalSelect(null)} />;
 }
 
 // ─── SPLASH SCREEN ─────────────────────────────────────────────────────────────
@@ -2093,10 +2258,10 @@ function SplashScreen({ theme }) {
     <div style={{
       display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center",
       minHeight: "100vh", position: "relative", width: "100vw", overflow: "hidden",
-      background: theme === 'dark' ? "url('/login_bg.png') center/cover no-repeat" : "url('/login_bg.png') center/cover no-repeat",
+      background: "url('/homefood_bg.png') center/cover no-repeat",
       color: "#fff"
     }}>
-      <div style={{ position: "absolute", inset: 0, background: theme === 'dark' ? "rgba(26,15,0,0.95)" : "rgba(255,248,240,0.92)", zIndex: 0 }} />
+      <div style={{ position: "absolute", inset: 0, background: theme === 'dark' ? "rgba(26,15,0,0.8)" : "rgba(255,248,240,0.85)", zIndex: 0 }} />
       <style>{getStyle(theme)}</style>
       
       <div style={{ position: "relative", zIndex: 1, textAlign: "center", animation: "scaleUp 1s cubic-bezier(0.16, 1, 0.3, 1)" }}>
@@ -2115,7 +2280,7 @@ function SplashScreen({ theme }) {
                      letterSpacing: -1 }}>
           HomeBite
         </h1>
-        <p style={{ fontSize: 18, color: theme === 'dark' ? "#d4a57a" : "#8a5c30", letterSpacing: 4, textTransform: "uppercase", marginTop: 8, fontWeight: 600 }}>
+        <p style={{ fontSize: 18, color: theme === 'dark' ? "var(--text-sub)" : "#8a5c30", letterSpacing: 4, textTransform: "uppercase", marginTop: 8, fontWeight: 600 }}>
           Mess Management
         </p>
 
@@ -2170,6 +2335,17 @@ export default function App() {
 
   const [toast, setToast] = useState(null);
   const [showNotifs, setShowNotifs] = useState(false);
+  const notifRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (notifRef.current && !notifRef.current.contains(e.target)) {
+        setShowNotifs(false);
+      }
+    };
+    if (showNotifs) document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showNotifs]);
 
   // Persistence Wrappers
   const setStudents = (val) => { db.set('students', typeof val === 'function' ? val(students) : val); };
@@ -2224,7 +2400,7 @@ export default function App() {
       case "dashboard": return <Dashboard students={students} inventory={inventory} />;
       case "studentDashboard": {
         const me = students?.find(s => s.id === user.id) || students?.[0] || { id:"?", name:"Student", room:"-", plan:"Full Mess", paid:true, balance:0 };
-        return <StudentDashboard student={me} enrolledMess={enrolledMess} setEnrolledMess={setEnrolledMess} setActiveTab={setActiveTab} showToast={showToast} />;
+        return <StudentDashboard student={me} enrolledMess={enrolledMess} setEnrolledMess={setEnrolledMess} setActiveTab={setActiveTab} showToast={showToast} setStudents={setStudents} />;
       }
       case "menu": return <MenuPage user={user} showToast={showToast} />;
       case "attendance": return <AttendancePage students={students} setStudents={setStudents} showToast={showToast} />;
@@ -2266,20 +2442,28 @@ export default function App() {
               <div className="logo-title">HomeBite</div>
               <div className="logo-sub">Mess Management</div>
             </div>
-            <div className="notif-bell" onClick={() => setShowNotifs(!showNotifs)}>
+            <div className="notif-bell" ref={notifRef} onClick={() => setShowNotifs(!showNotifs)}>
               🔔
               {notifications.filter(n=>n.unread).length > 0 && <span className="notif-badge">{notifications.filter(n=>n.unread).length}</span>}
               {showNotifs && (
                 <div className="notif-dropdown" onClick={e=>e.stopPropagation()}>
-                  <div style={{ padding: 16, borderBottom: "1px solid #3d2000", fontWeight: 700, color: "#f97316" }}>Notifications</div>
-                  {notifications.map(n => (
-                    <div key={n.id} className={`notif-item ${n.unread ? "unread" : ""}`} onClick={() => {
-                        setNotifications(prev => prev.map(notif => notif.id===n.id ? {...notif, unread:false} : notif));
-                    }}>
-                      <div style={{ fontSize: 13, color: "#f5c89a", marginBottom: 4 }}>{n.text}</div>
-                      <div style={{ fontSize: 11, color: "#7a5030" }}>{n.time}</div>
-                    </div>
-                  ))}
+                  <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--sidebar-border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div style={{ fontWeight: 800, color: "var(--text)" }}>Notifications</div>
+                    {notifications.filter(n=>n.unread).length > 0 && (
+                      <button className="btn btn-ghost btn-sm" onClick={(e) => { e.stopPropagation(); setNotifications(prev => prev.map(n => ({...n, unread:false}))); }} style={{ padding: "4px 8px", fontSize: 11 }}>Mark all read</button>
+                    )}
+                  </div>
+                  <div style={{ padding: 8 }}>
+                    {notifications.length === 0 && <div style={{ padding: 16, textAlign: "center", color: "var(--text-muted)", fontSize: 13 }}>No notifications</div>}
+                    {notifications.map(n => (
+                      <div key={n.id} className={`notif-item ${n.unread ? "unread" : ""}`} style={{ borderRadius: 8, marginBottom: 4 }} onClick={() => {
+                          setNotifications(prev => prev.map(notif => notif.id===n.id ? {...notif, unread:false} : notif));
+                      }}>
+                        <div style={{ fontSize: 13, color: "var(--text)", marginBottom: 4 }}>{n.text}</div>
+                        <div style={{ fontSize: 11, color: "var(--text-muted)" }}>{n.time}</div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
@@ -2304,8 +2488,12 @@ export default function App() {
           <div className="sidebar-footer">
             <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom: 8 }}>
               <div style={{ cursor: "pointer" }} onClick={() => setActiveTab("profile")}>
-                <div style={{ fontWeight: 700, color: "var(--text)" }}>{profile.name}</div>
-                <div style={{ fontSize: 10, color: "var(--text-muted)" }}>View Profile</div>
+                <div style={{ fontWeight: 700, color: "var(--text)", fontSize: 13 }}>
+                  {user?.role === "student"
+                    ? (students?.find(s => s.id === user.id)?.name || user.id)
+                    : "Administrator"}
+                </div>
+                <div style={{ fontSize: 10, color: "var(--text-muted)" }}>{user?.id} · {user?.role === "admin" ? "Admin" : "Student"}</div>
               </div>
               <button className="btn btn-ghost btn-sm" style={{ padding:"4px 8px", fontSize:10 }} onClick={() => setUser(null)}>Logout</button>
             </div>

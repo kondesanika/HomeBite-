@@ -59,14 +59,18 @@ io.on('connection', (socket) => {
   });
 
   socket.on("login", ({ username, password }, callback) => {
-    if (username === "admin" && password === "admin123") {
-      return callback({ success: true, role: "admin", id: "admin" });
+    if (username === "admin") {
+      if (password === "admin123") {
+        return callback({ success: true, role: "admin", id: "admin" });
+      } else {
+        return callback({ success: false, message: "Invalid admin password" });
+      }
     }
-    // Simple mock logic for student: any non-admin with username starting with HB or anything really
-    if (username) {
+    // Simple mock logic for student: any non-admin with username starting with HB or anything really but requires a password
+    if (username && password) {
       return callback({ success: true, role: "student", id: username });
     }
-    return callback({ success: false, message: "Invalid credentials" });
+    return callback({ success: false, message: "Invalid credentials. Please provide valid username and password." });
   });
 
   socket.on("signup", (userData, callback) => {
