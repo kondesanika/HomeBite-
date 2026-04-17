@@ -192,14 +192,28 @@ const getStyle = (theme) => (theme === 'light' ? lightVars : darkVars) + `
     .grid-4, .grid-3 { grid-template-columns: repeat(2, 1fr); }
     .grid-2 { grid-template-columns: 1fr; }
     .page-title { font-size: 28px; }
+    .profile-grid { grid-template-columns: 1fr; }
   }
 
-  @media (max-width: 640px) {
-    .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
-    .page-header { margin-bottom: 24px; }
-    .card { padding: 20px; }
+  @media (max-width: 768px) {
+    .main { padding: 24px 16px; }
+    .page-title { font-size: 24px; }
+    .card { padding: 20px; border-radius: 16px; }
+    .grid-4, .grid-3 { grid-template-columns: 1fr; }
     .card-value { font-size: 32px; }
-    .main { padding: 20px 16px; }
+    .modal-content { padding: 24px; border-radius: 20px; }
+    .logo-title { font-size: 20px; }
+  }
+
+  @media (max-width: 480px) {
+    .main { padding: 16px 12px; }
+    .page-title { font-size: 22px; }
+    .card { padding: 16px; }
+    .btn { padding: 10px 20px; font-size: 13px; }
+    .card-value { font-size: 28px; }
+    .nav-item { padding: 10px 20px; margin: 2px 8px; }
+    .sidebar-footer { padding: 16px 20px; }
+    .modal-content { padding: 20px; }
   }
 
   .mobile-nav-header { display: none; }
@@ -215,6 +229,7 @@ const getStyle = (theme) => (theme === 'light' ? lightVars : darkVars) + `
     align-items: center;
     justify-content: center;
   }
+
 
 
   .page-header {
@@ -1681,7 +1696,7 @@ function NearbyPage() {
         <div className="page-sub">Real-time map powered by OpenStreetMap · Pune, India</div>
       </div>
 
-      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(360px, 1fr))", gap:20 }}>
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(280px, 1fr))", gap:20 }}>
         <div className="card" style={{ height: 480, position:"relative", padding:0, overflow:"hidden", borderRadius:16, minWidth:"100%" }}>
           <ReactLeafletMap filteredPlaces={filteredPlaces} selected={selected} setSelected={setSelected} typeColor={typeColor} />
         </div>
@@ -2320,7 +2335,7 @@ function AdminLoginPage({ onLogin, onBack }) {
     <div style={{ display:"flex", justifyContent:"center", alignItems:"center", minHeight:"100vh", background:"url('/homefood_bg.png') center/cover no-repeat", position: "relative", width:"100vw" }}>
       <div style={{ position: "absolute", inset: 0, background: "rgba(20, 10, 0, 0.8)", zIndex: 0 }} />
       <style>{getStyle('dark')}</style>
-      <div className="card" style={{ width: 400, position: "relative", zIndex: 1, padding: 32, borderTop: "4px solid #eab308", borderBottom: "4px solid #eab308", boxShadow: "0 24px 64px rgba(234, 179, 8, 0.15)" }}>
+      <div className="card" style={{ width: "calc(100% - 32px)", maxWidth: 400, position: "relative", zIndex: 1, padding: 32, borderTop: "4px solid #eab308", borderBottom: "4px solid #eab308", boxShadow: "0 24px 64px rgba(234, 179, 8, 0.15)" }}>
         <button className="btn btn-ghost btn-sm" onClick={onBack} style={{ position: "absolute", top: 16, left: 16, padding: "4px 8px" }}>← Back</button>
         <div style={{ textAlign: "center", marginBottom: 24, marginTop: 12 }}>
           <div style={{ fontSize: 48, marginBottom: 8 }}>🛡️</div>
@@ -2377,7 +2392,7 @@ function StudentLoginPage({ onLogin, onBack }) {
     <div style={{ display:"flex", justifyContent:"center", alignItems:"center", minHeight:"100vh", background:"url('/homefood_bg.png') center/cover no-repeat", position: "relative", width:"100vw" }}>
       <div style={{ position: "absolute", inset: 0, background: "rgba(26,15,0,0.75)", zIndex: 0 }} />
       <style>{getStyle('dark')}</style>
-      <div className="card" style={{ width: 360, position: "relative", zIndex: 1, padding: 32, boxShadow: "0 24px 64px rgba(249, 115, 22, 0.15)", borderTop: "4px solid #f97316" }}>
+      <div className="card" style={{ width: "calc(100% - 32px)", maxWidth: 360, position: "relative", zIndex: 1, padding: 32, boxShadow: "0 24px 64px rgba(249, 115, 22, 0.15)", borderTop: "4px solid #f97316" }}>
         <button className="btn btn-ghost btn-sm" onClick={onBack} style={{ position: "absolute", top: 16, left: 16, padding: "4px 8px" }}>← Back</button>
         <div style={{ textAlign: "center", marginBottom: 24, marginTop: 12 }}>
           <div style={{ fontSize: 44, marginBottom: 8, filter: "drop-shadow(0 4px 8px rgba(249,115,22,0.4))" }}>🍽️</div>
@@ -2423,13 +2438,13 @@ function PortalSelector({ onSelect }) {
       <div style={{ position: "absolute", inset: 0, background: "rgba(26,15,0,0.7)", zIndex: 0 }} />
       <style>{getStyle('dark')}</style>
       <div style={{ textAlign:"center", marginBottom:48, position: "relative", zIndex: 1 }}>
-        <div className="logo-title" style={{ fontSize:52, marginBottom: 8 }}>HomeBite</div>
+        <div className="logo-title" style={{ fontSize: "min(52px, 12vw)", marginBottom: 8 }}>HomeBite</div>
         <div className="logo-sub" style={{ fontSize:15, letterSpacing: 4, color:"var(--text-sub)" }}>SELECT YOUR PORTAL</div>
       </div>
       <div style={{ display:"flex", gap:32, flexWrap:"wrap", justifyContent:"center", position: "relative", zIndex: 1 }}>
         <div
           className="card"
-          style={{ width: 260, padding: 32, cursor:"pointer", textAlign:"center", transition:"all 0.3s cubic-bezier(0.4, 0, 0.2, 1)", borderTop: "4px solid #f97316", background: "rgba(37, 18, 0, 0.8)", backdropFilter: "blur(10px)" }}
+          style={{ width: "calc(100% - 40px)", maxWidth: 260, padding: 32, cursor:"pointer", textAlign:"center", transition:"all 0.3s cubic-bezier(0.4, 0, 0.2, 1)", borderTop: "4px solid #f97316", background: "rgba(37, 18, 0, 0.8)", backdropFilter: "blur(10px)" }}
           onClick={() => onSelect("student")}
           onMouseEnter={e => { e.currentTarget.style.transform="translateY(-10px)"; e.currentTarget.style.boxShadow="0 24px 48px rgba(249,115,22,0.3)"; e.currentTarget.style.background="var(--sidebar-bg)"; }}
           onMouseLeave={e => { e.currentTarget.style.transform=""; e.currentTarget.style.boxShadow=""; e.currentTarget.style.background="rgba(37, 18, 0, 0.8)"; }}
@@ -2440,7 +2455,7 @@ function PortalSelector({ onSelect }) {
         </div>
         <div
           className="card"
-          style={{ width: 260, padding: 32, cursor:"pointer", textAlign:"center", transition:"all 0.3s cubic-bezier(0.4, 0, 0.2, 1)", borderTop: "4px solid #eab308", background: "rgba(37, 18, 0, 0.8)", backdropFilter: "blur(10px)" }}
+          style={{ width: "calc(100% - 40px)", maxWidth: 260, padding: 32, cursor:"pointer", textAlign:"center", transition:"all 0.3s cubic-bezier(0.4, 0, 0.2, 1)", borderTop: "4px solid #eab308", background: "rgba(37, 18, 0, 0.8)", backdropFilter: "blur(10px)" }}
           onClick={() => onSelect("admin")}
           onMouseEnter={e => { e.currentTarget.style.transform="translateY(-10px)"; e.currentTarget.style.boxShadow="0 24px 48px rgba(234,179,8,0.3)"; e.currentTarget.style.background="var(--sidebar-bg)"; }}
           onMouseLeave={e => { e.currentTarget.style.transform=""; e.currentTarget.style.boxShadow=""; e.currentTarget.style.background="rgba(37, 18, 0, 0.8)"; }}
