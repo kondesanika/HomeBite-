@@ -2528,6 +2528,20 @@ export default function App() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [theme, setThemeState] = useState(() => localStorage.getItem('hb_theme') || 'dark');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [backendConnected, setBackendConnected] = useState(db.isConnected());
+
+  useEffect(() => {
+    const onConnect = () => setBackendConnected(true);
+    const onDisconnect = () => setBackendConnected(false);
+    db.socket.on("connect", onConnect);
+    db.socket.on("disconnect", onDisconnect);
+    return () => {
+      db.socket.off("connect", onConnect);
+      db.socket.off("disconnect", onDisconnect);
+    };
+  }, []);
+
+
 
   const [enrolledMess, setEnrolledMess] = useState(() => messesList[0]); // default: HomeBite Central
 
@@ -2642,11 +2656,21 @@ export default function App() {
   }
 
   if (!user) {
-    return <LoginPage onLogin={(role, id) => {
-      setUser({ role, id });
-      setActiveTab(role === "admin" ? "dashboard" : "studentDashboard");
-    }} />;
+    return (
+      <>
+        {!backendConnected && (
+          <div style={{ position: "fixed", top: 0, left: 0, right: 0, background: "#ef4444", color: "#fff", textAlign: "center", padding: "8px", fontSize: 12, zIndex: 10000, fontWeight: 700 }}>
+            ⚠️ Cannot reach backend server. Please check your connection or deployment settings.
+          </div>
+        )}
+        <LoginPage onLogin={(role, id) => {
+          setUser({ role, id });
+          setActiveTab(role === "admin" ? "dashboard" : "studentDashboard");
+        }} />
+      </>
+    );
   }
+
 
   return (
     <>
@@ -2694,10 +2718,11 @@ export default function App() {
             </div>
           </div>
           <div style={{ padding: "0 20px" }}>
-            <div className="live-indicator">
-              <span className="pulse-dot"></span>
-              Backend Server: Connected
+            <div className="live-indicator" style={{ color: backendConnected ? "#22c55e" : "#ef4444", borderColor: backendConnected ? "rgba(34, 197, 94, 0.2)" : "rgba(239, 68, 68, 0.2)", background: backendConnected ? "rgba(34, 197, 94, 0.05)" : "rgba(239, 68, 68, 0.05)" }}>
+              <span className="pulse-dot" style={{ background: backendConnected ? "#22c55e" : "#ef4444", boxShadow: backendConnected ? "0 0 8px #22c55e" : "0 0 8px #ef4444" }}></span>
+              Backend Server: {backendConnected ? "Connected" : "Disconnected"}
             </div>
+
           </div>
           {navItems.map(item => (
             <div key={item.id} className={`nav-item${activeTab===item.id?" active":""}`} onClick={()=>{setActiveTab(item.id); setIsMobileMenuOpen(false);}}>

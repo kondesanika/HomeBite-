@@ -1,15 +1,29 @@
 import { io } from "socket.io-client";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3001";
-const socket = io(API_URL);
+console.log("Connecting to backend at:", API_URL);
+
+const socket = io(API_URL, {
+  transports: ["websocket", "polling"],
+  reconnectionAttempts: 5,
+  timeout: 10000,
+});
+
+let isConnected = false;
 
 socket.on("connect", () => {
+  isConnected = true;
   console.log("Connected to Real-time Backend ✓");
 });
 
 socket.on("connect_error", (err) => {
+  isConnected = false;
   console.error("Connection Error:", err.message);
+  if (window.location.protocol === "https:" && API_URL.startsWith("http://localhost")) {
+    console.warn("CRITICAL: You are accessing a secure site (HTTPS) but trying to connect to a local non-secure backend (HTTP). This is likely being blocked by your browser's security policy.");
+  }
 });
+
 
 let currentDB = {
   students: [],
@@ -60,5 +74,8 @@ export const db = {
         resolve(res);
       });
     });
-  }
+  },
+  isConnected: () => isConnected,
+  socket: socket
 };
+
