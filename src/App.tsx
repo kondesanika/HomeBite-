@@ -809,6 +809,7 @@ function Dashboard({ students, inventory }) {
   const tiffinCount = students.filter(s => s.rsvp?.[mealKey] !== false && s.mealType?.[mealKey] === "tiffin").length;
   const dineInCount = attendingTotal - tiffinCount;
 
+
   return (
     <div className="fade-in">
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
@@ -826,6 +827,8 @@ function Dashboard({ students, inventory }) {
         <StatCard label="Pending Dues" value={unpaid} note={`₹${students.filter(s=>!s.paid).reduce((a,b)=>a+b.balance,0).toLocaleString()} total`} color="#ef4444" />
         <StatCard label="Low Stock Items" value={lowStock.length} note="Alerts active" color="#eab308" />
         <StatCard label="Avg Rating" value="4.2★" note="Based on latest reviews" color="#22c55e" />
+        <StatCard label="Guest Meals" value={totalGuestMeals} note="Today's bookings" color="#a855f7" />
+        <StatCard label="Guest Revenue" value={`₹${guestRevenue.toLocaleString()}`} note="Today's total" color="#10b981" />
       </div>
 
       <div className="card" style={{ marginBottom: 24, background: "linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, rgba(249, 115, 22, 0.05) 100%)" }}>
@@ -864,6 +867,7 @@ function Dashboard({ students, inventory }) {
             );
           })}
         </div>
+
       </div>
 
       <div className="grid-2" style={{ marginBottom: 20 }}>
@@ -1733,6 +1737,7 @@ function ReactLeafletMap({ filteredPlaces, selected, setSelected, typeColor }) {
 }
 
 
+
 function RSVPPage({ student, setStudents, showToast }) {
   const [rsvpState, setRsvpState] = useState(() => student.rsvp || {
     breakfast: true, lunch: true, dinner: true,
@@ -1840,6 +1845,26 @@ function RSVPPage({ student, setStudents, showToast }) {
             </div>
           );
         })}
+
+        {/* Alternative simple RSVP view (from Incoming) */}
+        {["today", "tomorrow"].map(day => (
+          <div className="card" key={day} style={{ opacity: 0.7 }}>
+            <div className="section-title" style={{ textTransform: "capitalize" }}>{day}'s Meals (Alt View)</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {["breakfast", "lunch", "dinner"].map(meal => (
+                <div key={meal} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "var(--bg)", border: "1px solid var(--card-border)", padding: "14px", borderRadius: "10px" }}>
+                  <div>
+                    <div style={{ fontWeight: 600, color: "var(--text)", textTransform: "capitalize", fontSize: 14 }}>{meal}</div>
+                    <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4 }}>
+                      {rsvpState[day]?.[meal] ? "✅ You are attending" : "❌ You are skipping"}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+
       </div>
       <div style={{ marginTop: 32, textAlign: "center" }}>
         <button className="btn btn-primary" style={{ minWidth: 240, height: 50, fontSize: 16 }} onClick={saveRSVP}>Save Preferences</button>
