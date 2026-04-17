@@ -914,7 +914,7 @@ function Dashboard({ students, inventory }) {
         <div className="page-sub">Here's what's happening at HomeBite today</div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 20, marginBottom: 24 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 240px), 1fr))", gap: "min(20px, 4vw)", marginBottom: 24 }}>
         <StatCard label="Total Students" value={students.length} note="Enrolled members" color="#f97316" />
         <StatCard label="Pending Dues" value={unpaid} note={`₹${students.filter(s=>!s.paid).reduce((a,b)=>a+b.balance,0).toLocaleString()} total`} color="#ef4444" />
         <StatCard label="Low Stock Items" value={lowStock.length} note="Alerts active" color="#eab308" />
@@ -1962,7 +1962,7 @@ function RSVPPage({ student, setStudents, showToast }) {
                           <button 
                             onClick={() => setMealType(mealId, 'dine-in')}
                             style={{ 
-                              flex: 1, padding: "8px", borderRadius: "8px", fontSize: 12, fontWeight: 700, border: "none", cursor: "pointer",
+                              flex: 1, padding: "10px 4px", borderRadius: "8px", fontSize: "min(12px, 3.2vw)", fontWeight: 700, border: "none", cursor: "pointer",
                               background: currentType === 'dine-in' ? "linear-gradient(135deg, #f97316 0%, #ea580c 100%)" : "transparent",
                               color: currentType === 'dine-in' ? "#fff" : "var(--text-muted)",
                               transition: "all 0.2s"
@@ -1973,7 +1973,7 @@ function RSVPPage({ student, setStudents, showToast }) {
                           <button 
                             onClick={() => setMealType(mealId, 'tiffin')}
                             style={{ 
-                              flex: 1, padding: "8px", borderRadius: "8px", fontSize: 12, fontWeight: 700, border: "none", cursor: "pointer",
+                              flex: 1, padding: "10px 4px", borderRadius: "8px", fontSize: "min(12px, 3.2vw)", fontWeight: 700, border: "none", cursor: "pointer",
                               background: currentType === 'tiffin' ? "linear-gradient(135deg, #f97316 0%, #ea580c 100%)" : "transparent",
                               color: currentType === 'tiffin' ? "#fff" : "var(--text-muted)",
                               transition: "all 0.2s"
@@ -2440,8 +2440,13 @@ function StudentLoginPage({ onLogin, onBack }) {
     if (isSignUp) {
       if (!username || !password || !name) return setError("Please fill all required fields.");
       const res = await db.signup({ username, password, name, role: "student" });
-      if (res.success) onLogin(res.role, res.id);
-      else setError(res.message);
+      if (res.success) {
+        setIsSignUp(false);
+        setPassword("");
+        setError("Account created successfully! Please sign in below.");
+      } else {
+        setError(res.message);
+      }
     } else {
       if (!username || !password) return setError("Please enter username and password.");
       const res = await db.login(username, password);
@@ -2449,6 +2454,7 @@ function StudentLoginPage({ onLogin, onBack }) {
       else setError(res.message || "Invalid Student credentials");
     }
   };
+
 
   return (
     <div style={{ display:"flex", justifyContent:"center", alignItems:"center", minHeight:"100vh", background:"url('/homefood_bg.png') center/cover no-repeat", position: "relative", width:"100vw" }}>
@@ -2462,7 +2468,17 @@ function StudentLoginPage({ onLogin, onBack }) {
           <div style={{ color: "var(--text-sub)", fontSize: 13, marginTop: 4 }}>Access your mess dashboard</div>
         </div>
         
-        {error && <div style={{ background:"rgba(220, 38, 38, 0.1)", color:"#f87171", padding:12, borderRadius:8, fontSize:13, marginBottom:16, border:"1px solid rgba(220, 38, 38, 0.3)", textAlign: "center" }}>{error}</div>}
+        {error && (
+          <div style={{ 
+            background: error.includes("successfully") ? "rgba(34, 197, 94, 0.1)" : "rgba(220, 38, 38, 0.1)", 
+            color: error.includes("successfully") ? "#4ade80" : "#f87171", 
+            padding: 12, borderRadius: 8, fontSize: 13, marginBottom: 16, 
+            border: error.includes("successfully") ? "1px solid rgba(34, 197, 94, 0.3)" : "1px solid rgba(220, 38, 38, 0.3)", 
+            textAlign: "center" 
+          }}>
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleLogin} style={{ display:"flex", flexDirection:"column", gap:14 }}>
           {isSignUp && (
@@ -2566,11 +2582,12 @@ function SplashScreen({ theme }) {
           <span style={{ fontSize: 64, filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.2))", transform: "rotate(10deg)" }}>🍽️</span>
         </div>
         
-        <h1 style={{ fontSize: 56, fontWeight: 900, fontFamily: "'Playfair Display', serif", margin: 0, 
+        <h1 style={{ fontSize: "min(56px, 14vw)", fontWeight: 900, fontFamily: "'Playfair Display', serif", margin: 0, 
                      background: "linear-gradient(to right, #f97316, #eab308)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
                      letterSpacing: -1 }}>
           HomeBite
         </h1>
+
         <p style={{ fontSize: 18, color: theme === 'dark' ? "var(--text-sub)" : "#8a5c30", letterSpacing: 4, textTransform: "uppercase", marginTop: 8, fontWeight: 600 }}>
           Mess Management
         </p>
