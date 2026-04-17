@@ -843,8 +843,8 @@ const messesList = [
 ];
 
 const initialStudents = [
-  { id: "HB001", name: "Aanya Sharma", room: "A-101", plan: "Full Mess", paid: true, balance: 0 },
-  { id: "HB002", name: "Rohit Verma", room: "B-205", plan: "Full Mess", paid: false, balance: 2400 },
+  { id: "HB001", name: "Mahek Bagwan", room: "A-101", plan: "Full Mess", paid: true, balance: 300, enrolledMessId: 1, guestBookings: [] },
+  { id: "HB002", name: "Rohit Verma", room: "B-205", plan: "Full Mess", paid: false, balance: 2400, enrolledMessId: 1, guestBookings: [] },
   { id: "HB003", name: "Priya Nair", room: "A-110", plan: "Lunch Only", paid: true, balance: 0 },
   { id: "HB004", name: "Arjun Mehta", room: "C-302", plan: "Full Mess", paid: false, balance: 4800 },
   { id: "HB005", name: "Sneha Patel", room: "B-108", plan: "Dinner Only", paid: true, balance: 0 },
@@ -1038,8 +1038,8 @@ function Dashboard({ students, inventory }) {
 function StudentDashboard({ student, enrolledMess, setEnrolledMess, setActiveTab, showToast, setStudents }) {
   const todayMenu = weekMenu[today] || weekMenu["Monday"];
   const isPaid = student.paid;
-  const isEnrolled = !!enrolledMess;
-  const [showChangeMess, setShowChangeMess] = useState(false);
+  const isEnrolled = !!student.enrolledMessId;
+  const enrolledMess = messes.find(m => m.id === student.enrolledMessId);
   const [showStopMess, setShowStopMess] = useState(false);
   const [messPaused, setMessPaused] = useState(false);
   const [selectedNewMess, setSelectedNewMess] = useState("");
@@ -2240,17 +2240,27 @@ function MessDirectoryPage({ showToast }) {
 
   const handleEnroll = async (e) => {
     e.preventDefault();
-    if (!enrollForm.password) {
+    if (!enrollForm.password && !user) {
       showToast("Please provide a password for your account.");
       return;
     }
+    
+    // If user is already logged in, just update their enrolledMessId
+    if (user && user.role === "student") {
+      setStudents(prev => prev.map(s => s.id === user.id ? { ...s, enrolledMessId: parseInt(enrollForm.messId), plan: enrollForm.plan } : s));
+      showToast(`Successfully enrolled in ${messes.find(m => m.id === parseInt(enrollForm.messId))?.name}! 🎉`);
+      setShowEnrollModal(false);
+      return;
+    }
+
     const res = await db.signup({
       username: enrollForm.email,
       password: enrollForm.password,
       name: enrollForm.name,
       role: "student",
       phone: enrollForm.phone,
-      plan: enrollForm.plan
+      plan: enrollForm.plan,
+      enrolledMessId: parseInt(enrollForm.messId)
     });
 
     if (res.success) {
@@ -2260,6 +2270,7 @@ function MessDirectoryPage({ showToast }) {
       showToast(res.message || "Enrollment failed.");
     }
   };
+
 
   return (
     <div className="fade-in">
@@ -2592,19 +2603,19 @@ function StudentLoginPage({ onLogin, onBack }) {
           </div>
           <div>
             <label style={{ fontSize:12, color:"var(--text-sub)", marginLeft:4, fontWeight: 600 }}>Password <span style={{color:"#ef4444"}}>*</span></label>
-            <div style={{ position: "relative" }}>
+            <div style={{ position: "relative", width: "100%" }}>
               <input 
                 type={showPassword ? "text" : "password"} 
                 placeholder="••••••••" 
                 value={password} 
                 onChange={e=>setPassword(e.target.value)} 
-                style={{ marginTop:6, paddingRight: 40 }} 
+                style={{ marginTop:6, paddingRight: 40, width: "100%", boxSizing: "border-box" }} 
                 disabled={loading}
               />
               <button 
                 type="button" 
                 onClick={() => setShowPassword(!showPassword)}
-                style={{ position: "absolute", right: 12, top: "55%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", opacity: 0.6, color: "var(--text)" }}
+                style={{ position: "absolute", right: 10, top: "58%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", opacity: 0.6, color: "var(--text)", padding: 4 }}
               >
                 {showPassword ? "👁️" : "🙈"}
               </button>
@@ -2909,6 +2920,22 @@ export default function App() {
         )}
         <LoginPage onLogin={(role, id) => {
           setUser({ role, id });
+          const student = students.find(s => s.id === id);
+          if (student) {
+            setProfile({
+              name: student.name,
+              id: student.id,
+              address: student.room || "Central Hostel",
+              location: "Campus",
+              email: student.email || `${student.id.toLowerCase()}@university.edu`
+            });
+            if (student.enrolledMessId) {
+              const mess = messes.find(m => m.id === student.enrolledMessId);
+              if (mess) setEnrolledMess(mess);
+            } else {
+              setEnrolledMess(null);
+            }
+          }
           setActiveTab(role === "admin" ? "dashboard" : "studentDashboard");
         }} />
       </>
