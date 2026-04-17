@@ -799,6 +799,16 @@ function Dashboard({ students, inventory }) {
   const totalGuestMeals = students.reduce((acc, s) => acc + (s.guestMeals || 0), 0);
   const guestRevenue = totalGuestMeals * 150;
 
+  // Calculate Headcounts for Today's next meal (determining if it's lunch or dinner)
+  const currentHour = new Date().getHours();
+  let mealKey = "breakfast";
+  if (currentHour >= 10 && currentHour < 16) mealKey = "lunch";
+  else if (currentHour >= 16) mealKey = "dinner";
+
+  const attendingTotal = students.filter(s => s.rsvp?.[mealKey] !== false).length;
+  const tiffinCount = students.filter(s => s.rsvp?.[mealKey] !== false && s.mealType?.[mealKey] === "tiffin").length;
+  const dineInCount = attendingTotal - tiffinCount;
+
   return (
     <div className="fade-in">
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
@@ -816,8 +826,44 @@ function Dashboard({ students, inventory }) {
         <StatCard label="Pending Dues" value={unpaid} note={`₹${students.filter(s=>!s.paid).reduce((a,b)=>a+b.balance,0).toLocaleString()} total`} color="#ef4444" />
         <StatCard label="Low Stock Items" value={lowStock.length} note="Alerts active" color="#eab308" />
         <StatCard label="Avg Rating" value="4.2★" note="Based on latest reviews" color="#22c55e" />
-        <StatCard label="Guest Meals" value={totalGuestMeals} note="Today's bookings" color="#a855f7" />
-        <StatCard label="Guest Revenue" value={`₹${guestRevenue.toLocaleString()}`} note="Today's total" color="#10b981" />
+      </div>
+
+      <div className="card" style={{ marginBottom: 24, background: "linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, rgba(249, 115, 22, 0.05) 100%)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+          <div className="section-title" style={{ margin: 0 }}>👩‍🍳 Kitchen Planning — Today's Headcount</div>
+          <span className="badge badge-orange" style={{ fontSize: 10 }}>Real-time Sync</span>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 24 }}>
+          {["breakfast", "lunch", "dinner"].map(m => {
+            const att = students.filter(s => s.rsvp?.[m] !== false).length;
+            const tiffin = students.filter(s => s.rsvp?.[m] !== false && s.mealType?.[m] === "tiffin").length;
+            const dine = att - tiffin;
+            const isActive = m === mealKey;
+            
+            return (
+              <div key={m} style={{ 
+                padding: "20px", background: "var(--card-bg)", borderRadius: "20px", border: isActive ? "2px solid #f97316" : "1px solid var(--card-border)",
+                position: "relative", overflow: "hidden"
+              }}>
+                {isActive && <div style={{ position: "absolute", top: 10, right: 10, fontSize: 18 }}>🔥</div>}
+                <div style={{ fontSize: 13, fontWeight: 800, color: "#f97316", textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>{m}</div>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+                  <span style={{ fontSize: 14, color: "var(--text-sub)" }}>🍽 Dine-in</span>
+                  <span style={{ fontSize: 18, fontWeight: 900, color: "var(--text)" }}>{dine}</span>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+                  <span style={{ fontSize: 14, color: "var(--text-sub)" }}>🥡 Tiffin / Takeaway</span>
+                  <span style={{ fontSize: 18, fontWeight: 900, color: "#a855f7" }}>{tiffin}</span>
+                </div>
+                <hr className="divider" style={{ margin: "12px 0" }} />
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text-muted)" }}>TOTAL PORTIONS</span>
+                  <span style={{ fontSize: 20, fontWeight: 1000, color: "#f97316" }}>{att}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       <div className="grid-2" style={{ marginBottom: 20 }}>
@@ -1329,11 +1375,12 @@ function AttendancePage({ students, setStudents, showToast }) {
         <div className="table-wrap">
           <table>
             <thead>
-              <tr>
+                <tr>
                 <th>ID</th>
                 <th>Name</th>
                 <th>Room</th>
                 <th>Plan</th>
+                <th>Preference</th>
                 <th>Breakfast</th>
                 <th>Lunch</th>
                 <th>Dinner</th>
@@ -1348,7 +1395,19 @@ function AttendancePage({ students, setStudents, showToast }) {
                   <td><span className="tag">{s.id}</span></td>
                   <td style={{ fontWeight: 600, color: "var(--text)" }}>{s.name}</td>
                   <td>{s.room}</td>
-                  <td><span className="badge badge-blue">{s.plan}</span></td>
+                  <td>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                      {["breakfast", "lunch", "dinner"].map(m => {
+                        const type = s.mealType?.[m] || 'dine-in';
+                        const attending = s.rsvp?.[m] !== false;
+                        return attending ? (
+                          <span key={m} style={{ fontSize: 10, color: type === 'tiffin' ? "#a855f7" : "#3b82f6", fontWeight: 700, textTransform: "uppercase" }}>
+                            {m.slice(0,1)}: {type === 'tiffin' ? "🥡 Tiffin" : "🍽 Dine"}
+                          </span>
+                        ) : null;
+                      })}
+                    </div>
+                  </td>
                   {["breakfast","lunch","dinner"].map(m => (
                     <td key={m}>
                       <input type="checkbox" checked={attendance[s.id]?.[m]||false} onChange={()=>toggleMeal(s.id,m)}
@@ -1674,57 +1733,119 @@ function ReactLeafletMap({ filteredPlaces, selected, setSelected, typeColor }) {
 }
 
 
-function RSVPPage({ showToast }) {
-  const [rsvpState, setRsvpState] = useState({
-    today: { breakfast: true, lunch: true, dinner: true },
-    tomorrow: { breakfast: true, lunch: true, dinner: true }
+function RSVPPage({ student, setStudents, showToast }) {
+  const [rsvpState, setRsvpState] = useState(() => student.rsvp || {
+    breakfast: true, lunch: true, dinner: true,
+    tomorrow_breakfast: true, tomorrow_lunch: true, tomorrow_dinner: true
+  });
+  
+  const [typeState, setTypeState] = useState(() => student.mealType || {
+    breakfast: 'dine-in', lunch: 'dine-in', dinner: 'dine-in',
+    tomorrow_breakfast: 'dine-in', tomorrow_lunch: 'dine-in', tomorrow_dinner: 'dine-in'
   });
 
-  const toggleRSVP = (day, meal) => {
-    setRsvpState(prev => ({
-      ...prev,
-      [day]: { ...prev[day], [meal]: !prev[day][meal] }
-    }));
+  const toggleRSVP = (meal) => {
+    setRsvpState(prev => ({ ...prev, [meal]: !prev[meal] }));
+  };
+
+  const setMealType = (meal, type) => {
+    setTypeState(prev => ({ ...prev, [meal]: type }));
   };
 
   const saveRSVP = () => {
-    showToast("RSVP successfully updated! Thank you for reducing food waste 🌍");
+    setStudents(prev => prev.map(s => {
+      if (s.id === student.id) {
+        return { ...s, rsvp: rsvpState, mealType: typeState };
+      }
+      return s;
+    }));
+    showToast("Preferences saved! The kitchen has been updated. 🍽️");
   };
+
+  const mealItems = [
+    { id: "breakfast", label: "Breakfast", icon: "☀️" },
+    { id: "lunch", label: "Lunch", icon: "🌤" },
+    { id: "dinner", label: "Dinner", icon: "🌙" }
+  ];
 
   return (
     <div className="fade-in">
       <div className="page-header">
-        <div className="page-title">Meal RSVP 📅</div>
-        <div className="page-sub">Opt-out of meals if you're not eating in the mess to save food</div>
+        <div className="page-title">Meal Preferences & RSVP 📅</div>
+        <div className="page-sub">Select Dine-in or Tiffin packaging for your meals</div>
       </div>
       
       <div className="grid-2">
-        {["today", "tomorrow"].map(day => (
-          <div className="card" key={day}>
-            <div className="section-title" style={{ textTransform: "capitalize" }}>{day}'s Meals</div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              {["breakfast", "lunch", "dinner"].map(meal => (
-                <div key={meal} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "var(--bg)", border: "1px solid #3d2000", padding: "14px", borderRadius: "10px" }}>
-                  <div>
-                    <div style={{ fontWeight: 600, color: "var(--text)", textTransform: "capitalize", fontSize: 14 }}>{meal}</div>
-                    <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4 }}>
-                      {rsvpState[day][meal] ? "✅ You are attending" : "❌ You are skipping"}
+        {["Today", "Tomorrow"].map(dayLabel => {
+          const prefix = dayLabel === "Tomorrow" ? "tomorrow_" : "";
+          return (
+            <div className="card" key={dayLabel}>
+              <div className="section-title">{dayLabel}'s Meals</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                {mealItems.map(m => {
+                  const mealId = prefix + m.id;
+                  const isAttending = rsvpState[mealId];
+                  const currentType = typeState[mealId] || 'dine-in';
+
+                  return (
+                    <div key={mealId} style={{ background: "var(--bg)", border: "1px solid var(--card-border)", padding: "16px", borderRadius: "16px", transition: "all 0.3s" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: isAttending ? 12 : 0 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                          <span style={{ fontSize: 20 }}>{m.icon}</span>
+                          <div>
+                            <div style={{ fontWeight: 800, color: "var(--text)", fontSize: 15 }}>{m.label}</div>
+                            <div style={{ fontSize: 11, color: isAttending ? "#22c55e" : "#ef4444", fontWeight: 700, textTransform: "uppercase" }}>
+                              {isAttending ? "✓ Attending" : "✕ Skipping"}
+                            </div>
+                          </div>
+                        </div>
+                        <label style={{ position:"relative", display:"inline-block", width:48, height:26 }}>
+                          <input type="checkbox" checked={isAttending} onChange={() => toggleRSVP(mealId)} style={{ opacity:0, width:0, height:0 }} />
+                          <span style={{ position:"absolute", cursor:"pointer", top:0, left:0, right:0, bottom:0, backgroundColor: isAttending ? "#f97316" : "var(--table-border)", borderRadius:34, transition:"0.4s" }}>
+                            <span style={{ position:"absolute", content:'""', height:18, width:18, left: isAttending ? 26 : 4, bottom:4, backgroundColor:"white", borderRadius:"50%", transition:"0.4s", boxShadow:"0 2px 4px rgba(0,0,0,0.2)" }} />
+                          </span>
+                        </label>
+                      </div>
+
+                      {isAttending && (
+                        <div className="fade-in" style={{ display: "flex", gap: 8, padding: "4px", background: "var(--input-bg)", borderRadius: "12px", border: "1px solid var(--input-border)" }}>
+                          <button 
+                            onClick={() => setMealType(mealId, 'dine-in')}
+                            style={{ 
+                              flex: 1, padding: "8px", borderRadius: "8px", fontSize: 12, fontWeight: 700, border: "none", cursor: "pointer",
+                              background: currentType === 'dine-in' ? "linear-gradient(135deg, #f97316 0%, #ea580c 100%)" : "transparent",
+                              color: currentType === 'dine-in' ? "#fff" : "var(--text-muted)",
+                              transition: "all 0.2s"
+                            }}
+                          >
+                            🍽 Dine-in
+                          </button>
+                          <button 
+                            onClick={() => setMealType(mealId, 'tiffin')}
+                            style={{ 
+                              flex: 1, padding: "8px", borderRadius: "8px", fontSize: 12, fontWeight: 700, border: "none", cursor: "pointer",
+                              background: currentType === 'tiffin' ? "linear-gradient(135deg, #f97316 0%, #ea580c 100%)" : "transparent",
+                              color: currentType === 'tiffin' ? "#fff" : "var(--text-muted)",
+                              transition: "all 0.2s"
+                            }}
+                          >
+                            🥡 Tiffin / Takeaway
+                          </button>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                  <label style={{ position:"relative", display:"inline-block", width:44, height:24 }}>
-                    <input type="checkbox" checked={rsvpState[day][meal]} onChange={() => toggleRSVP(day, meal)} style={{ opacity:0, width:0, height:0 }} />
-                    <span style={{ position:"absolute", cursor:"pointer", top:0, left:0, right:0, bottom:0, backgroundColor: rsvpState[day][meal] ? "#22c55e" : "#ef4444", borderRadius:34, transition:"0.4s" }}>
-                      <span style={{ position:"absolute", content:'""', height:16, width:16, left: rsvpState[day][meal] ? 24 : 4, bottom:4, backgroundColor:"white", borderRadius:"50%", transition:"0.4s", boxShadow:"0 2px 4px rgba(0,0,0,0.2)" }} />
-                    </span>
-                  </label>
-                </div>
-              ))}
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
-      <div style={{ marginTop: 24 }}>
-        <button className="btn btn-primary" onClick={saveRSVP}>Save RSVP Preferences</button>
+      <div style={{ marginTop: 32, textAlign: "center" }}>
+        <button className="btn btn-primary" style={{ minWidth: 240, height: 50, fontSize: 16 }} onClick={saveRSVP}>Save Preferences</button>
+        <div style={{ marginTop: 12, fontSize: 12, color: "var(--text-muted)" }}>
+          Changes are updated in real-time for the kitchen staff.
+        </div>
       </div>
     </div>
   );
@@ -2408,7 +2529,7 @@ export default function App() {
       case "feedback": return <FeedbackPage user={user} showToast={showToast} />;
       case "offers": return <OffersPage user={user} offers={offers} setOffers={setOffers} showToast={showToast} />;
       case "nearby": return <NearbyPage />;
-      case "rsvp": return <RSVPPage showToast={showToast} />;
+      case "rsvp": return <RSVPPage student={students.find(s => s.id === user.id) || students[0]} setStudents={setStudents} showToast={showToast} />;
       case "messDirectory": return <MessDirectoryPage showToast={showToast} setEnrolledMess={setEnrolledMess} />;
       case "profile": return <UserProfilePage profile={profile} setProfile={setProfile} showToast={showToast} />;
       case "settings": return <SettingsPage theme={theme} setTheme={setTheme} />;
