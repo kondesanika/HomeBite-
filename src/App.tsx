@@ -181,39 +181,47 @@ const getStyle = (theme) => (theme === 'light' ? lightVars : darkVars) + `
       height: 64px;
       background: var(--bg2);
       border-bottom: 1px solid var(--sidebar-border);
-      padding: 0 20px;
+      padding: 0 16px;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       z-index: 1400;
       backdrop-filter: blur(12px);
     }
-    .logo-title { font-size: 22px; }
+    .mobile-nav-header .hamburger { position: absolute; left: 12px; }
+    .logo-title { font-size: 20px; text-align: center; }
     .logo-sub { display: none; }
     .grid-4, .grid-3 { grid-template-columns: repeat(2, 1fr); }
     .grid-2 { grid-template-columns: 1fr; }
     .page-title { font-size: 28px; }
     .profile-grid { grid-template-columns: 1fr; }
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -16px; padding: 0 16px; }
+    table { min-width: 800px; }
   }
 
   @media (max-width: 768px) {
     .main { padding: 24px 16px; }
-    .page-title { font-size: 24px; }
+    .page-title { font-size: 24px; text-align: center; }
+    .page-header { text-align: center; }
     .card { padding: 20px; border-radius: 16px; }
     .grid-4, .grid-3 { grid-template-columns: 1fr; }
     .card-value { font-size: 32px; }
     .modal-content { padding: 24px; border-radius: 20px; }
     .logo-title { font-size: 20px; }
+    .btn { width: 100%; }
+    .btn-sm { width: auto; }
   }
 
   @media (max-width: 480px) {
     .main { padding: 16px 12px; }
     .page-title { font-size: 22px; }
     .card { padding: 16px; }
-    .btn { padding: 10px 20px; font-size: 13px; }
+    .btn { padding: 12px 20px; font-size: 14px; }
     .card-value { font-size: 28px; }
-    .nav-item { padding: 10px 20px; margin: 2px 8px; }
+    .nav-item { padding: 12px 16px; margin: 2px 4px; border-radius: 8px; }
     .sidebar-footer { padding: 16px 20px; }
-    .modal-content { padding: 20px; }
+    .modal-content { padding: 20px; width: 95%; }
+    .logo-title { font-size: 18px; }
+    input, select, textarea { padding: 12px 14px; font-size: 14px; }
   }
 
   .mobile-nav-header { display: none; }
@@ -229,6 +237,7 @@ const getStyle = (theme) => (theme === 'light' ? lightVars : darkVars) + `
     align-items: center;
     justify-content: center;
   }
+
 
 
 
@@ -911,7 +920,7 @@ function Dashboard({ students, inventory }) {
         <StatCard label="Low Stock Items" value={lowStock.length} note="Alerts active" color="#eab308" />
         <StatCard label="Avg Rating" value="4.2★" note="Based on latest reviews" color="#22c55e" />
         <StatCard label="Guest Meals" value={totalGuestMeals} note="Today's bookings" color="#a855f7" />
-        <StatCard label="Guest Revenue" value={`₹${guestRevenue.toLocaleString()}`} note="Today's total" color="#10b981" />
+        <StatCard label="Guest Revenue" value={`₹${(totalGuestMeals * 150).toLocaleString()}`} note="Today's total" color="#10b981" />
       </div>
 
       <div className="card" style={{ marginBottom: 24, background: "linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, rgba(249, 115, 22, 0.05) 100%)" }}>
@@ -1022,15 +1031,22 @@ function StudentDashboard({ student, enrolledMess, setEnrolledMess, setActiveTab
   const [messPaused, setMessPaused] = useState(false);
   const [selectedNewMess, setSelectedNewMess] = useState("");
 
-  const handleBookGuestMeal = () => {
+  const handleBookGuestMeal = (mealType = "lunch") => {
     if (!setStudents) return;
     setStudents(prev => prev.map(s => {
       if (s.id === student.id) {
-        return { ...s, guestMeals: (s.guestMeals || 0) + 1, balance: s.balance + 150, paid: false };
+        const currentBookings = s.guestBookings || [];
+        return { 
+          ...s, 
+          guestMeals: (s.guestMeals || 0) + 1, 
+          guestBookings: [...currentBookings, { meal: mealType, time: new Date().toLocaleTimeString() }],
+          balance: s.balance + 150, 
+          paid: false 
+        };
       }
       return s;
     }));
-    showToast("Guest meal booked successfully! ₹150 added to your dues.");
+    showToast(`Guest ${mealType} booked successfully! ₹150 added to your dues.`);
   };
 
   const handleChangeMess = () => {
@@ -1119,17 +1135,52 @@ function StudentDashboard({ student, enrolledMess, setEnrolledMess, setActiveTab
           
           <div className="card" style={{ marginBottom: 20 }}>
             <div className="section-title">Guest Meal Booking 👥</div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: 14, background: "var(--meal-card)", border: "1px solid var(--card-border)", borderRadius: 10, flexWrap: "wrap", gap: 12 }}>
-              <div>
-                <div style={{ color: "var(--text)", fontWeight: 700, fontSize: 15, marginBottom: 4 }}>Book an extra meal</div>
-                <div style={{ color: "var(--text-sub)", fontSize: 13, lineHeight: 1.5 }}>
-                  Having a friend over? Book an extra meal for ₹150. This will be automatically added to your current dues.
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              <div style={{ padding: 16, background: "var(--meal-card)", border: "1px solid var(--card-border)", borderRadius: 16 }}>
+                <div style={{ color: "var(--text)", fontWeight: 700, fontSize: 16, marginBottom: 8 }}>Book an extra meal for your guest</div>
+                <div style={{ color: "var(--text-sub)", fontSize: 13, lineHeight: 1.5, marginBottom: 16 }}>
+                  Hosting someone? Book a meal for ₹150. Select the meal time below and it will be added to your dues.
                 </div>
-                {student.guestMeals > 0 && <div style={{ color: "#f97316", fontSize: 13, marginTop: 6, fontWeight: "bold" }}>You have booked {student.guestMeals} guest meal(s) today.</div>}
+                
+                <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
+                  <select 
+                    id="guestMealType"
+                    style={{ flex: 1, minWidth: 150 }}
+                    defaultValue="lunch"
+                  >
+                    <option value="breakfast">☀️ Breakfast (₹150)</option>
+                    <option value="lunch">🌤 Lunch (₹150)</option>
+                    <option value="dinner">🌙 Dinner (₹150)</option>
+                  </select>
+                  <button 
+                    className="btn btn-primary" 
+                    style={{ flex: "none", minWidth: 160 }}
+                    onClick={() => {
+                      const meal = document.getElementById("guestMealType").value;
+                      handleBookGuestMeal(meal);
+                    }} 
+                    disabled={messPaused}
+                  >
+                    + Book Now
+                  </button>
+                </div>
+
+                {student.guestBookings?.length > 0 && (
+                  <div style={{ marginTop: 20 }}>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: "var(--text-muted)", marginBottom: 8, textTransform: "uppercase" }}>Your Guest Bookings Today:</div>
+                    <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                      {student.guestBookings.map((b, i) => (
+                        <div key={i} style={{ padding: "6px 12px", background: "rgba(249, 115, 22, 0.1)", border: "1px solid rgba(249, 115, 22, 0.2)", borderRadius: 20, fontSize: 12, color: "#f97316", fontWeight: 700 }}>
+                          👤 {b.meal.charAt(0).toUpperCase() + b.meal.slice(1)}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
-              <button className="btn btn-primary" onClick={handleBookGuestMeal} disabled={messPaused}>+ Book Meal (₹150)</button>
             </div>
           </div>
+
         </>
       )}
 
@@ -1473,6 +1524,7 @@ function AttendancePage({ students, setStudents, showToast }) {
                 <th>Dinner</th>
                 <th>Status</th>
                 <th>Balance</th>
+                <th>Guests</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -1504,6 +1556,16 @@ function AttendancePage({ students, setStudents, showToast }) {
                   <td><span className={"badge " + (s.paid?"badge-green":"badge-red")}>{s.paid?"Paid":"Unpaid"}</span></td>
                   <td style={{ color: s.paid?"#4ade80":"#ef4444", fontWeight:700 }}>
                     {s.paid ? "—" : `₹${s.balance.toLocaleString()}`}
+                  </td>
+                  <td>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                      {(s.guestBookings || []).map((b, idx) => (
+                        <span key={idx} className="badge" style={{ fontSize: 9, background: "rgba(168, 85, 247, 0.1)", color: "#a855f7", border: "1px solid rgba(168, 85, 247, 0.2)" }}>
+                          {b.meal.slice(0,3)}
+                        </span>
+                      ))}
+                      {(!s.guestBookings || s.guestBookings.length === 0) && <span style={{ color: "var(--text-muted)", fontSize: 11 }}>—</span>}
+                    </div>
                   </td>
                   <td>
                     {!s.paid && <button className="btn btn-primary btn-sm" onClick={()=>markPaid(s.id)}>Mark Paid</button>}
