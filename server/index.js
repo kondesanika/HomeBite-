@@ -42,8 +42,22 @@ let db = {
     address: "Block A, Room 101, Central Hostel, Campus Estate",
     location: "Mumbai, India",
     email: "aanya.s@university.edu"
-  }
+  },
+  messes: [
+    { id: 1, name: "HomeBite (Central)", type: "General Mess", open: "7:30 AM", close: "10:30 PM", status: "Open", rating: 4.8, distance: "0 m", plan: "₹3000/month", offers: ["10% off annually"], menu: "Standard Indian Thali", address: "Ground Floor, Central Hostel Block", img: "/login_bg.png", isVeg: true, contact: "+91 98765-43210" },
+    { id: 2, name: "Annapurna Mess", type: "Pure Veg Meal", open: "8:00 AM", close: "9:30 PM", status: "Open", rating: 4.5, distance: "120 m", plan: "₹2500/month", offers: ["First week free demo"], menu: "Gujarati & Punjabi Veg Thali", address: "Behind Library, East Wing", img: "/mess_veg.png", isVeg: true, contact: "+91 98765-43211" },
+    { id: 3, name: "Student Point Canteen", type: "Snacks & Fast Food", open: "10:00 AM", close: "11:00 PM", status: "Open", rating: 4.2, distance: "300 m", plan: "Pay per item", offers: ["Free chai with ₹100 order"], menu: "Samosa, Maggi, Burgers", address: "Near North Gate Entrance", img: "/mess_canteen.png", isVeg: false, contact: "+91 98765-43212" },
+    { id: 4, name: "Night Owl Cafe", type: "Late Night", open: "8:00 PM", close: "3:00 AM", status: "Closed", rating: 4.9, distance: "450 m", plan: "Pay per item", offers: ["No delivery fee"], menu: "Coffee, Sandwiches, Fries", address: "Rooftop, Block D Recreation Center", img: "/login_bg.png", isVeg: false, contact: "+91 98765-43213" },
+    { id: 5, name: "Spice Route Mess", type: "Non-Veg", open: "12:00 PM", close: "10:00 PM", status: "Open", rating: 4.4, distance: "500 m", plan: "₹3500/month", offers: ["Free Sunday special add-on"], menu: "Chicken Biryani, Curries, Rotis", address: "Basement Level, South Block", img: "/mess_premium.png", isVeg: false, contact: "+91 98765-43214" },
+  ],
+  feedbacks: [
+    { id: 1, student: "Aanya S.", meal: "Monday Lunch", rating: 5, comment: "Paneer was excellent today!", time: "2h ago" },
+    { id: 2, student: "Rohit V.", meal: "Tuesday Dinner", rating: 3, comment: "Biryani was a bit dry.", time: "5h ago" },
+    { id: 3, student: "Priya N.", meal: "Today Breakfast", rating: 4, comment: "Idli was soft and fresh!", time: "1h ago" },
+  ]
 };
+
+
 
 io.on('connection', (socket) => {
   console.log('Client connected:', socket.id);

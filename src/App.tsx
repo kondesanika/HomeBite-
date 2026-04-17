@@ -1019,7 +1019,7 @@ function Dashboard({ students, inventory }) {
       <div className="card">
         <div className="section-title">Recent Feedback</div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 14 }}>
-          {feedbacks.slice(0,3).map(f => (
+          {feedbacks.slice(0,6).map(f => (
             <div key={f.id} style={{ background: "var(--meal-card)", border: "1px solid var(--card-border)", borderRadius: 12, padding: 16 }}>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <span style={{ fontWeight: 700, color: "var(--text)", fontSize: 13 }}>{f.student}</span>
@@ -1196,6 +1196,55 @@ function StudentDashboard({ student, enrolledMess, setEnrolledMess, setActiveTab
 
         </>
       )}
+
+      {/* ATTENDANCE HISTORY */}
+      <div className="card" style={{ marginBottom: 20 }}>
+        <div className="section-title">My Attendance History 📅</div>
+        <div className="table-wrap" style={{ display: "flex", gap: 10, paddingBottom: 10 }}>
+          {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(day => (
+            <div key={day} style={{ 
+              minWidth: 100, padding: 16, background: "var(--meal-card)", border: "1px solid var(--card-border)", borderRadius: 16, textAlign: "center",
+              opacity: day === "Sun" ? 0.5 : 1
+            }}>
+              <div style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 8, fontWeight: 700 }}>{day}</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                <span className="badge badge-green" style={{ fontSize: 9 }}>LUNCH ✓</span>
+                <span className="badge badge-green" style={{ fontSize: 9 }}>DINNER ✓</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* FEEDBACK FORM */}
+      <div className="card" style={{ marginBottom: 20 }}>
+        <div className="section-title">Share Your Feedback 💬</div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+            <select id="fbMeal" style={{ flex: 1, minWidth: 140 }}>
+              <option>Today Breakfast</option>
+              <option>Today Lunch</option>
+              <option>Yesterday Dinner</option>
+            </select>
+            <div style={{ display: "flex", gap: 4, alignItems: "center", padding: "0 12px", background: "var(--input-bg)", borderRadius: 12, border: "1px solid var(--input-border)" }}>
+              {[1,2,3,4,5].map(s => <span key={s} style={{ cursor: "pointer", fontSize: 18, color: "#eab308" }}>★</span>)}
+            </div>
+          </div>
+          <textarea id="fbComment" placeholder="Tell us what you liked or how we can improve..." style={{ minHeight: 80, padding: 12, background: "var(--input-bg)", border: "1px solid var(--input-border)", borderRadius: 12, color: "var(--text)" }}></textarea>
+          <button 
+            className="btn btn-primary" 
+            onClick={() => {
+              const comment = document.getElementById("fbComment").value;
+              if(!comment) return;
+              setFeedbacks(prev => [{ id: Date.now(), student: student.name, meal: document.getElementById("fbMeal").value, rating: 5, comment, time: "Just now" }, ...prev]);
+              document.getElementById("fbComment").value = "";
+              showToast("Feedback submitted! Thank you! ❤️");
+            }}
+          >
+            Submit Feedback
+          </button>
+        </div>
+      </div>
 
       <div className="grid-2">
         <div className="card">
@@ -2441,18 +2490,41 @@ function AdminLoginPage({ onLogin, onBack }) {
 
 function StudentLoginPage({ onLogin, onBack }) {
   const [isSignUp, setIsSignUp] = useState(false);
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(() => localStorage.getItem("hb_remembered_user") || "");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(() => !!localStorage.getItem("hb_remembered_user"));
+  const [showForgotModal, setShowForgotModal] = useState(false);
+
+  const validate = () => {
+    if (isSignUp) {
+      if (!name.trim()) return "Full Name is required.";
+      if (!username.trim()) return "User ID is required.";
+      if (password.length < 8) return "Password must be at least 8 characters.";
+    } else {
+      if (!username.trim()) return "Please enter your User ID.";
+      if (!password) return "Please enter your password.";
+    }
+    return null;
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError("");
+    const valError = validate();
+    if (valError) return setError(valError);
     
+    setError("");
+    setLoading(true);
+    
+    // Simulate network delay
+    await new Promise(r => setTimeout(r, 800));
+
     if (isSignUp) {
-      if (!username || !password || !name) return setError("Please fill all required fields.");
       const res = await db.signup({ username, password, name, role: "student" });
+      setLoading(false);
       if (res.success) {
         setIsSignUp(false);
         setPassword("");
@@ -2461,24 +2533,38 @@ function StudentLoginPage({ onLogin, onBack }) {
         setError(res.message);
       }
     } else {
-      if (!username || !password) return setError("Please enter username and password.");
       const res = await db.login(username, password);
-      if (res.success && res.role === "student") onLogin(res.role, res.id);
-      else setError(res.message || "Invalid Student credentials");
+      setLoading(false);
+      if (res.success && res.role === "student") {
+        if (rememberMe) localStorage.setItem("hb_remembered_user", username);
+        else localStorage.removeItem("hb_remembered_user");
+        
+        sessionStorage.setItem("hb_auth_token", "dummy-jwt-token");
+        onLogin(res.role, res.id);
+      } else {
+        setError(res.message || "Invalid credentials. Please try again.");
+      }
     }
   };
-
 
   return (
     <div style={{ display:"flex", justifyContent:"center", alignItems:"center", minHeight:"100vh", background:"url('/homefood_bg.png') center/cover no-repeat", position: "relative", width:"100vw" }}>
       <div style={{ position: "absolute", inset: 0, background: "rgba(26,15,0,0.75)", zIndex: 0 }} />
-      <style>{getStyle('dark')}</style>
-      <div className="card" style={{ width: "calc(100% - 32px)", maxWidth: 360, position: "relative", zIndex: 1, padding: 32, boxShadow: "0 24px 64px rgba(249, 115, 22, 0.15)", borderTop: "4px solid #f97316" }}>
+      <style>{`
+        ${getStyle('dark')}
+        .spinner {
+          width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff;
+          border-radius: 50%; animation: spin 0.8s linear infinite; display: inline-block; vertical-align: middle; margin-right: 8px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+      `}</style>
+      
+      <div className="card" style={{ width: "calc(100% - 32px)", maxWidth: 380, position: "relative", zIndex: 1, padding: 32, boxShadow: "0 24px 64px rgba(249, 115, 22, 0.15)", borderTop: "4px solid #f97316" }}>
         <button className="btn btn-ghost btn-sm" onClick={onBack} style={{ position: "absolute", top: 16, left: 16, padding: "4px 8px" }}>← Back</button>
         <div style={{ textAlign: "center", marginBottom: 24, marginTop: 12 }}>
           <div style={{ fontSize: 44, marginBottom: 8, filter: "drop-shadow(0 4px 8px rgba(249,115,22,0.4))" }}>🍽️</div>
           <h2 style={{ margin: 0, color: "#f97316", fontFamily: "'Playfair Display', serif", fontSize: 24 }}>{isSignUp ? "Create Account" : "Student Login"}</h2>
-          <div style={{ color: "var(--text-sub)", fontSize: 13, marginTop: 4 }}>Access your mess dashboard</div>
+          <div style={{ color: "var(--text-sub)", fontSize: 13, marginTop: 4 }}>Access your HomeBite dashboard</div>
         </div>
         
         {error && (
@@ -2493,31 +2579,76 @@ function StudentLoginPage({ onLogin, onBack }) {
           </div>
         )}
 
-        <form onSubmit={handleLogin} style={{ display:"flex", flexDirection:"column", gap:14 }}>
+        <form onSubmit={handleLogin} style={{ display:"flex", flexDirection:"column", gap:16 }}>
           {isSignUp && (
             <div>
               <label style={{ fontSize:12, color:"var(--text-sub)", marginLeft:4, fontWeight: 600 }}>Full Name <span style={{color:"#ef4444"}}>*</span></label>
-              <input placeholder="Aanya Sharma" value={name} onChange={e=>setName(e.target.value)} style={{ marginTop:6 }} required />
+              <input placeholder="E.g. Mahek Bagwan" value={name} onChange={e=>setName(e.target.value)} style={{ marginTop:6 }} disabled={loading} />
             </div>
           )}
           <div>
             <label style={{ fontSize:12, color:"var(--text-sub)", marginLeft:4, fontWeight: 600 }}>{isSignUp ? "Choose User ID" : "User ID"} <span style={{color:"#ef4444"}}>*</span></label>
-            <input placeholder="E.g., HB001" value={username} onChange={e=>setUsername(e.target.value)} style={{ marginTop:6 }} required />
+            <input placeholder="E.g., HB001" value={username} onChange={e=>setUsername(e.target.value)} style={{ marginTop:6 }} disabled={loading} />
           </div>
           <div>
             <label style={{ fontSize:12, color:"var(--text-sub)", marginLeft:4, fontWeight: 600 }}>Password <span style={{color:"#ef4444"}}>*</span></label>
-            <input type="password" placeholder="••••••••" value={password} onChange={e=>setPassword(e.target.value)} style={{ marginTop:6 }} required />
+            <div style={{ position: "relative" }}>
+              <input 
+                type={showPassword ? "text" : "password"} 
+                placeholder="••••••••" 
+                value={password} 
+                onChange={e=>setPassword(e.target.value)} 
+                style={{ marginTop:6, paddingRight: 40 }} 
+                disabled={loading}
+              />
+              <button 
+                type="button" 
+                onClick={() => setShowPassword(!showPassword)}
+                style={{ position: "absolute", right: 12, top: "55%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", opacity: 0.6, color: "var(--text)" }}
+              >
+                {showPassword ? "👁️" : "🙈"}
+              </button>
+            </div>
           </div>
-          <button type="submit" className="btn btn-primary" style={{ marginTop: 10, padding: 12, fontSize: 14 }}>{isSignUp ? "Sign Up Now" : "Sign In"}</button>
+
+          {!isSignUp && (
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: -4 }}>
+              <label style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, cursor: "pointer", color: "var(--text-sub)" }}>
+                <input type="checkbox" checked={rememberMe} onChange={e => setRememberMe(e.target.checked)} style={{ width: 14, height: 14 }} />
+                Remember Me
+              </label>
+              <button type="button" className="btn-link" onClick={() => setShowForgotModal(true)} style={{ fontSize: 12, color: "#f97316", background:"none", border:"none", padding:0, fontWeight:600 }}>Forgot Password?</button>
+            </div>
+          )}
+
+          <button type="submit" className="btn btn-primary" style={{ marginTop: 8, padding: 14, fontSize: 15 }} disabled={loading}>
+            {loading && <span className="spinner"></span>}
+            {isSignUp ? "Create My Account" : "Secure Sign In"}
+          </button>
         </form>
+
         <div style={{ marginTop: 24, fontSize:13, color:"var(--text-sub)", textAlign:"center" }}>
-          {isSignUp ? "Already have an account?" : "Don't have an account?"} <span style={{ color: "#f97316", fontWeight: "bold", cursor:"pointer", textDecoration:"underline" }} onClick={()=>{setIsSignUp(!isSignUp); setError("");}}>
+          {isSignUp ? "Already part of HomeBite?" : "New to HomeBite?"} <span style={{ color: "#f97316", fontWeight: "bold", cursor:"pointer", textDecoration:"underline" }} onClick={()=>{setIsSignUp(!isSignUp); setError("");}}>
             {isSignUp ? "Sign In" : "Sign Up"}
           </span>
         </div>
-        <div style={{ marginTop: 12, fontSize:11, color:"var(--text-muted)", textAlign:"center" }}>
-          Hint: User "HB001" / any password
-        </div>
+
+        {showForgotModal && (
+          <div className="modal-overlay" style={{ zIndex: 10000 }}>
+            <div className="modal-content" style={{ maxWidth: 340, textAlign: "center" }}>
+              <div style={{ fontSize: 32, marginBottom: 16 }}>🔑</div>
+              <h3 style={{ margin: "0 0 12px 0" }}>Reset Password</h3>
+              <p style={{ fontSize: 14, color: "var(--text-sub)", lineHeight: 1.5, marginBottom: 24 }}>
+                Enter your registered User ID and we'll send a password reset link to your email.
+              </p>
+              <input placeholder="Enter User ID" style={{ marginBottom: 20 }} />
+              <div style={{ display: "flex", gap: 12 }}>
+                <button className="btn btn-ghost" style={{ flex: 1 }} onClick={() => setShowForgotModal(false)}>Cancel</button>
+                <button className="btn btn-primary" style={{ flex: 1 }} onClick={() => { setShowForgotModal(false); setError("Reset link sent successfully!"); }}>Send Link</button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -2662,14 +2793,16 @@ export default function App() {
   const [inventory, setInventoryState] = useState(() => db.get('inventory'));
   const [offers, setOffersState] = useState(() => db.get('offers'));
   const [notifications, setNotificationsState] = useState(() => db.get('notifications'));
+  const [messes, setMessesState] = useState(() => db.get('messes') || messesList);
   const [profile, setProfileState] = useState(() => db.get('profile') || {
-    name: "Aanya Sharma",
+    name: "Mahek Bagwan",
     id: "HB001",
     address: "Block A, Room 101, Central Hostel, Campus Estate",
     location: "Mumbai, India",
-    email: "aanya.s@university.edu"
+    email: "mahek.b@university.edu"
   });
 
+  const [feedbacks, setFeedbacksState] = useState(() => db.get('feedbacks') || []);
   const [toast, setToast] = useState(null);
   const [showNotifs, setShowNotifs] = useState(false);
   const notifRef = useRef(null);
@@ -2690,6 +2823,8 @@ export default function App() {
   const setOffers = (val) => { db.set('offers', typeof val === 'function' ? val(offers) : val); };
   const setNotifications = (val) => { db.set('notifications', typeof val === 'function' ? val(notifications) : val); };
   const setProfile = (val) => { db.set('profile', typeof val === 'function' ? val(profile) : val); };
+  const setMesses = (val) => { db.set('messes', typeof val === 'function' ? val(messes) : val); };
+  const setFeedbacks = (val) => { db.set('feedbacks', typeof val === 'function' ? val(feedbacks) : val); };
 
   // Sync Listener
   useEffect(() => {
@@ -2698,9 +2833,11 @@ export default function App() {
       setInventoryState(data.inventory);
       setOffersState(data.offers);
       setNotificationsState(data.notifications);
-      if(data.profile) setProfileState(data.profile);
+      setProfileState(data.profile);
+      setMessesState(data.messes);
+      setFeedbacksState(data.feedbacks);
     });
-  }, [students, inventory, offers, notifications, profile]);
+  }, [students, inventory, offers, notifications, profile, messes]);
 
   const showToast = (msg) => {
     setToast(msg);
