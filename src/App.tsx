@@ -149,6 +149,74 @@ const getStyle = (theme) => (theme === 'light' ? lightVars : darkVars) + `
     max-width: 1400px;
   }
 
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    .sidebar {
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+      width: 280px;
+      z-index: 2000;
+    }
+    .sidebar.open {
+      transform: translateX(0);
+    }
+    .main {
+      margin-left: 0;
+      padding: 24px;
+    }
+    .sidebar-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1500;
+      backdrop-filter: blur(4px);
+      animation: fadeIn 0.3s ease;
+    }
+    .mobile-nav-header {
+      display: flex !important;
+      position: sticky;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 64px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--sidebar-border);
+      padding: 0 20px;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 1400;
+      backdrop-filter: blur(12px);
+    }
+    .logo-title { font-size: 22px; }
+    .logo-sub { display: none; }
+    .grid-4, .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    .grid-2 { grid-template-columns: 1fr; }
+    .page-title { font-size: 28px; }
+  }
+
+  @media (max-width: 640px) {
+    .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+    .page-header { margin-bottom: 24px; }
+    .card { padding: 20px; }
+    .card-value { font-size: 32px; }
+    .main { padding: 20px 16px; }
+  }
+
+  .mobile-nav-header { display: none; }
+  .hamburger {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--text);
+    padding: 8px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+
   .page-header {
     margin-bottom: 40px;
   }
@@ -2459,6 +2527,8 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [activeTab, setActiveTab] = useState("dashboard");
   const [theme, setThemeState] = useState(() => localStorage.getItem('hb_theme') || 'dark');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const [enrolledMess, setEnrolledMess] = useState(() => messesList[0]); // default: HomeBite Central
 
   const setTheme = (t) => {
@@ -2582,7 +2652,16 @@ export default function App() {
     <>
       <style>{getStyle(theme)}</style>
       <div className="hb-root">
-        <nav className="sidebar">
+        <div className="mobile-nav-header">
+          <button className="hamburger" onClick={() => setIsMobileMenuOpen(true)}>☰</button>
+          <div className="logo-title">HomeBite</div>
+          <div style={{ width: 40 }}></div>
+        </div>
+
+        {isMobileMenuOpen && <div className="sidebar-overlay" onClick={() => setIsMobileMenuOpen(false)}></div>}
+
+        <nav className={`sidebar ${isMobileMenuOpen ? "open" : ""}`}>
+
           <div className="logo" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingRight: 20 }}>
             <div>
               <div className="logo-title">HomeBite</div>
@@ -2621,7 +2700,8 @@ export default function App() {
             </div>
           </div>
           {navItems.map(item => (
-            <div key={item.id} className={`nav-item${activeTab===item.id?" active":""}`} onClick={()=>setActiveTab(item.id)}>
+            <div key={item.id} className={`nav-item${activeTab===item.id?" active":""}`} onClick={()=>{setActiveTab(item.id); setIsMobileMenuOpen(false);}}>
+
               <span className="nav-icon">{item.icon}</span>
               {item.label}
               {item.id==="inventory" && inventory.filter(i=>i.stock<=i.threshold).length>0 &&
